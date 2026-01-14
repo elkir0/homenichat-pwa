@@ -882,7 +882,7 @@ function MainApp() {
 
 function App() {
   return (
-    <Router>
+    <Router basename="/pwa">
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginRoute />} />
