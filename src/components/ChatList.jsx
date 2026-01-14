@@ -64,10 +64,10 @@ function ChatList({ chats, selectedChat, onChatSelect, onRefresh, onNewChat }) {
         <div className="header-gradient">
           <div className="header-top">
             <div className="app-branding">
-              <img src="/logo-chirosteo.png" alt="ChiroStéo" className="chirosteo-logo" />
+              <img src="/pwa/logo-192.png" alt="Homenichat" className="app-logo" />
               <div className="app-info">
                 <h1>Homenichat</h1>
-                <span className="app-subtitle">ChiroStéo Guadeloupe</span>
+                <span className="app-subtitle">One place - every chats</span>
               </div>
             </div>
             <div className="header-actions">

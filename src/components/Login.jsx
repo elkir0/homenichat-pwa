@@ -67,8 +67,8 @@ function Login({ onLogin }) {
       <div className="login-card">
         <div className="login-header">
           <img
-            src="/chirosteo-logo.png"
-            alt="ChiroStéo"
+            src="/pwa/logo-192.png"
+            alt="Homenichat"
             className="login-logo"
           />
           <h1>Homenichat</h1>
