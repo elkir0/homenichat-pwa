@@ -84,8 +84,8 @@ function Login({ onLogin }) {
 
           <div className="form-group">
             <input
-              type="email"
-              inputMode="email"
+              type="text"
+              inputMode="text"
               placeholder="Nom d'utilisateur"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
