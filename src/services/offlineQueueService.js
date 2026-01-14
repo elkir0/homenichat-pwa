@@ -5,7 +5,7 @@
 
 class OfflineQueueService {
   constructor() {
-    this.dbName = 'LekipChatDB';
+    this.dbName = 'HomenichatDB';
     this.dbVersion = 1;
     this.db = null;
     this.isOnline = navigator.onLine;
@@ -137,7 +137,7 @@ class OfflineQueueService {
   async sendQueuedMessage(queueItem) {
     try {
       // Simuler l'envoi (remplacer par l'appel API réel)
-      const response = await fetch('/api/baileys/message/sendText/lekipchat', {
+      const response = await fetch('/api/chats/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

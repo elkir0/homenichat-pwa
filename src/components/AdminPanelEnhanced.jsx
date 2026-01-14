@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Container,
-  Tabs,
-  Tab,
-  Paper,
   Typography,
   AppBar,
   Toolbar,
@@ -13,55 +9,54 @@ import {
   Menu,
   MenuItem,
   Divider,
-  Badge
+  Badge,
+  Paper,
+  Grid,
+  Chip,
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import {
-  People as PeopleIcon,
-  Dashboard as DashboardIcon,
   ExitToApp as LogoutIcon,
   AccountCircle as AccountIcon,
   Notifications as NotificationsIcon,
-  SettingsInputAntenna as AntennaIcon
+  Refresh as RefreshIcon,
+  CheckCircle as ConnectedIcon,
+  Cancel as DisconnectedIcon,
+  Info as InfoIcon
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
-import ProviderStatus from './admin/ProviderStatus';
-import ProviderSettings from './admin/ProviderSettings';
-import UserManagement from './admin/UserManagement';
 import CallStatsPanel from './admin/CallStatsPanel';
-import VoipSettings from './admin/VoipSettings';
 import notificationService from '../services/notificationService';
 
-function TabPanel({ children, value, index }) {
-  return (
-    <div hidden={value !== index} style={{ height: '100%' }}>
-      {value === index && (
-        <Box sx={{ p: 3, height: '100%', overflow: 'auto' }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
+/**
+ * AdminPanelEnhanced - Panneau de statut simplifié
+ *
+ * La configuration se fait exclusivement via l'interface admin du backend
+ * (http://server:3001/admin ou via le port configuré)
+ *
+ * Ce panneau affiche uniquement:
+ * - Statut des providers (lecture seule)
+ * - Statistiques d'appels
+ */
 function AdminPanelEnhanced() {
   const { user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [providerStatus, setProviderStatus] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [notifPermission, setNotifPermission] = useState(notificationService.getPermissionStatus());
 
   useEffect(() => {
     loadProviderStatus();
+    // Rafraîchir toutes les 30 secondes
+    const interval = setInterval(loadProviderStatus, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleEnableNotifications = async () => {
     const permission = await notificationService.requestPermission();
     setNotifPermission(permission);
-    if (permission === 'granted') {
-      alert('Notifications activées !');
-    } else if (permission === 'denied') {
-      alert('Notifications refusées. Activez-les dans les réglages iOS.');
-    }
   };
 
   const loadProviderStatus = async () => {
@@ -74,14 +69,15 @@ function AdminPanelEnhanced() {
       if (response.ok) {
         const data = await response.json();
         setProviderStatus(data);
+        setError(null);
+      } else {
+        throw new Error('Impossible de charger le statut');
       }
-    } catch (error) {
-      console.error('Erreur chargement statut:', error);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
   };
 
   const handleMenuOpen = (event) => {
@@ -97,6 +93,18 @@ function AdminPanelEnhanced() {
     logout();
   };
 
+  const getStatusChip = (isConnected, label) => {
+    return (
+      <Chip
+        icon={isConnected ? <ConnectedIcon /> : <DisconnectedIcon />}
+        label={label}
+        color={isConnected ? 'success' : 'default'}
+        variant={isConnected ? 'filled' : 'outlined'}
+        size="small"
+      />
+    );
+  };
+
   return (
     <Box sx={{
       flexGrow: 1,
@@ -110,27 +118,25 @@ function AdminPanelEnhanced() {
       <AppBar position="static" color="primary" elevation={0}>
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            L'ekip-Chat Admin
+            Homenichat
           </Typography>
 
-          {/* Indicateur de provider */}
-          {providerStatus && (
-            <Box sx={{ mr: 2 }}>
-              <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                Provider : {providerStatus.activeProvider === 'baileys' ? 'WhatsApp (Baileys)' :
-                  providerStatus.activeProvider === 'sms-bridge' ? 'SMS Bridge' :
-                    providerStatus.activeProvider === 'meta' ? 'Meta Cloud API' :
-                      providerStatus.activeProvider}
-              </Typography>
-            </Box>
-          )}
+          {/* Rafraîchir */}
+          <IconButton
+            color="inherit"
+            onClick={loadProviderStatus}
+            title="Rafraîchir"
+            sx={{ mr: 1 }}
+          >
+            <RefreshIcon />
+          </IconButton>
 
-          {/* Notifications - Cliquer pour activer */}
+          {/* Notifications */}
           <IconButton
             color="inherit"
             sx={{ mr: 1 }}
             onClick={handleEnableNotifications}
-            title={notifPermission === 'granted' ? 'Notifications activées' : 'Cliquez pour activer les notifications'}
+            title={notifPermission === 'granted' ? 'Notifications activées' : 'Activer les notifications'}
           >
             <Badge
               badgeContent={notifPermission === 'granted' ? '✓' : '!'}
@@ -170,73 +176,86 @@ function AdminPanelEnhanced() {
         </Toolbar>
       </AppBar>
 
-      {/* Tabs */}
-      <Paper sx={{ borderRadius: 0 }}>
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-        >
-          <Tab
-            icon={<DashboardIcon />}
-            label="Tableau de bord"
-            iconPosition="start"
-          />
-          <Tab
-            icon={<AntennaIcon />}
-            label="Canaux WhatsApp / SMS"
-            iconPosition="start"
-          />
-          <Tab
-            icon={<PeopleIcon />}
-            label="Utilisateurs"
-            iconPosition="start"
-          />
-          <Tab
-            icon={<AntennaIcon />} // Reusing icon or new one
-            label="Configuration WebRTC"
-            iconPosition="start"
-          />
-        </Tabs>
-      </Paper>
+      {/* Contenu principal */}
+      <Box sx={{ p: 2, flexGrow: 1, overflow: 'auto' }}>
+        {/* Alerte info */}
+        <Alert severity="info" icon={<InfoIcon />} sx={{ mb: 2 }}>
+          La configuration des providers se fait via l'interface admin du serveur.
+        </Alert>
 
-      {/* Contenu des tabs */}
-      <Container
-        maxWidth="xl"
-        sx={{
-          mt: 0,
-          component: 'main',
-          flexGrow: 1,
-          p: 0,
-          height: 'calc(100vh - 112px)',
-          overflow: 'hidden'
-        }}
-      >
-        {/* Tab 0: Dashboard (Vue d'ensemble) */}
-        <TabPanel value={activeTab} index={0}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <ProviderStatus token={localStorage.getItem('authToken')} />
-            <CallStatsPanel />
-          </Box>
-        </TabPanel>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
+        )}
 
-        {/* Tab 1: Configuration Canaux (Fusionné) */}
-        <TabPanel value={activeTab} index={1}>
-          <ProviderSettings />
-        </TabPanel>
+        {/* Statut des providers */}
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Statut des connexions
+          </Typography>
 
-        {/* Tab 2: Utilisateurs */}
-        <TabPanel value={activeTab} index={2}>
-          <UserManagement />
-        </TabPanel>
+          {loading ? (
+            <Box display="flex" justifyContent="center" p={3}>
+              <CircularProgress />
+            </Box>
+          ) : providerStatus ? (
+            <Grid container spacing={2}>
+              {/* Provider actif */}
+              <Grid item xs={12}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Provider actif
+                </Typography>
+                <Chip
+                  label={
+                    providerStatus.activeProvider === 'baileys' ? 'WhatsApp (Baileys)' :
+                    providerStatus.activeProvider === 'meta' ? 'Meta Cloud API' :
+                    providerStatus.activeProvider === 'sms-bridge' ? 'SMS Bridge' :
+                    providerStatus.activeProvider || 'Aucun'
+                  }
+                  color="primary"
+                  variant="filled"
+                />
+              </Grid>
 
-        {/* Tab 3: Configuration WebRTC */}
-        <TabPanel value={activeTab} index={3}>
-          <VoipSettings />
-        </TabPanel>
-      </Container>
+              {/* Liste des providers */}
+              {providerStatus.health?.providers && (
+                <Grid item xs={12}>
+                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ mt: 2 }}>
+                    Tous les providers
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    {Object.entries(providerStatus.health.providers).map(([name, status]) => (
+                      <Box key={name}>
+                        {getStatusChip(
+                          status.connected || status.isConnected,
+                          name === 'baileys' ? 'Baileys' :
+                          name === 'meta' ? 'Meta Cloud' :
+                          name === 'sms-bridge' ? 'SMS' : name
+                        )}
+                      </Box>
+                    ))}
+                  </Box>
+                </Grid>
+              )}
+
+              {/* Numéro connecté */}
+              {providerStatus.health?.providers?.baileys?.phoneNumber && (
+                <Grid item xs={12}>
+                  <Typography variant="body2" color="text.secondary">
+                    WhatsApp connecté: {providerStatus.health.providers.baileys.phoneNumber}
+                  </Typography>
+                </Grid>
+              )}
+            </Grid>
+          ) : (
+            <Typography color="text.secondary">
+              Aucune information disponible
+            </Typography>
+          )}
+        </Paper>
+
+        {/* Statistiques d'appels */}
+        <CallStatsPanel />
+      </Box>
     </Box>
   );
 }

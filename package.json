@@ -1,7 +1,7 @@
 {
-  "name": "lekip-chat-frontend",
-  "version": "0.9.11",
-  "description": "Frontend PWA pour L'ekip-Chat",
+  "name": "homenichat-pwa",
+  "version": "1.0.0",
+  "description": "Frontend PWA pour Homenichat - Unified Communication Platform",
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.12.1",

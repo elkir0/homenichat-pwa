@@ -66,7 +66,7 @@ function ChatList({ chats, selectedChat, onChatSelect, onRefresh, onNewChat }) {
             <div className="app-branding">
               <img src="/logo-chirosteo.png" alt="ChiroStéo" className="chirosteo-logo" />
               <div className="app-info">
-                <h1>L'ekip-Chat</h1>
+                <h1>Homenichat</h1>
                 <span className="app-subtitle">ChiroStéo Guadeloupe</span>
               </div>
             </div>

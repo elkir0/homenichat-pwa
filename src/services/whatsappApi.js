@@ -8,13 +8,36 @@ const API_URL = process.env.REACT_APP_API_URL || '';
 class WhatsAppApi {
   constructor() {
     this.token = localStorage.getItem('authToken');
+    this.sessionId = null; // Provider session ID for multi-provider support
+  }
+
+  /**
+   * Définit le provider à utiliser pour les requêtes
+   * @param sessionId - 'baileys' | 'meta' | null (auto)
+   */
+  setSessionId(sessionId) {
+    this.sessionId = sessionId;
+  }
+
+  /**
+   * Récupère le provider actif
+   */
+  getSessionId() {
+    return this.sessionId;
   }
 
   getHeaders() {
-    return {
+    const headers = {
       'Authorization': `Bearer ${this.token || localStorage.getItem('authToken')}`,
       'Content-Type': 'application/json'
     };
+
+    // Ajouter X-Session-Id si défini pour cibler un provider spécifique
+    if (this.sessionId) {
+      headers['X-Session-Id'] = this.sessionId;
+    }
+
+    return headers;
   }
 
   // Méthodes de connexion/état
@@ -169,7 +192,7 @@ class WhatsAppApi {
 
   async markAsRead(chatId) {
     try {
-      const response = await fetch(`${API_URL}/api/chats/${chatId}/read`, {
+      const response = await fetch(`${API_URL}/api/chats/${encodeURIComponent(chatId)}/read`, {
         method: 'POST',
         headers: this.getHeaders()
       });
@@ -179,6 +202,55 @@ class WhatsAppApi {
       return await response.json();
     } catch (error) {
       console.error('Error marking as read:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Marque un message spécifique comme lu
+   * POST /api/chats/:chatId/messages/:messageId/read
+   */
+  async markMessageAsRead(chatId, messageId) {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/chats/${encodeURIComponent(chatId)}/messages/${messageId}/read`,
+        {
+          method: 'POST',
+          headers: this.getHeaders()
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to mark message as read');
+      return await response.json();
+    } catch (error) {
+      console.error('Error marking message as read:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Envoie une réaction emoji sur un message
+   * POST /api/chats/:chatId/messages/:messageId/reaction
+   *
+   * @param chatId - ID du chat
+   * @param messageId - ID du message
+   * @param emoji - Emoji (chaîne vide pour supprimer la réaction)
+   */
+  async sendReaction(chatId, messageId, emoji) {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/chats/${encodeURIComponent(chatId)}/messages/${messageId}/reaction`,
+        {
+          method: 'POST',
+          headers: this.getHeaders(),
+          body: JSON.stringify({ emoji })
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to send reaction');
+      return await response.json();
+    } catch (error) {
+      console.error('Error sending reaction:', error);
       throw error;
     }
   }

@@ -297,3 +297,103 @@
     transform: translateY(0);
   }
 }
+
+/* Reaction Picker Overlay */
+.reaction-picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.reaction-picker {
+  background-color: var(--surface-color, #ffffff);
+  border-radius: 16px;
+  padding: 16px;
+  min-width: 280px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.reaction-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.reaction-picker-header span {
+  font-weight: 500;
+  color: var(--text-primary, #111b21);
+}
+
+.reaction-picker-header .close-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reaction-picker-header .close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.reaction-picker-header .close-btn .material-icons {
+  font-size: 20px;
+  color: var(--text-secondary, #667781);
+}
+
+.reaction-picker-emojis {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.reaction-btn {
+  background: none;
+  border: none;
+  font-size: 32px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.reaction-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  transform: scale(1.1);
+}
+
+.reaction-btn:active {
+  transform: scale(0.95);
+}
+
+.reaction-picker-preview {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.reaction-picker-preview .preview-label {
+  color: var(--text-secondary, #667781);
+  margin-right: 8px;
+}
+
+.reaction-picker-preview .preview-text {
+  color: var(--text-primary, #111b21);
+}

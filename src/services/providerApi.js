@@ -1,3 +1,10 @@
+/**
+ * Provider API - Lecture seule du statut des providers
+ *
+ * La configuration des providers se fait exclusivement via
+ * l'interface admin du backend (homenichat-serv/admin/)
+ */
+
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || '/api';
@@ -38,107 +45,37 @@ providerApi.interceptors.response.use(
 );
 
 const api = {
-  // Obtenir le statut de tous les providers
+  /**
+   * Obtenir le statut de tous les providers (lecture seule)
+   */
   async getProvidersStatus() {
     const response = await providerApi.get('/providers/status');
     return response.data;
   },
 
-  // Obtenir l'état de connexion du provider actif
+  /**
+   * Obtenir l'état de connexion du provider actif (lecture seule)
+   */
   async getConnectionState() {
     const response = await providerApi.get('/providers/status');
     const data = response.data;
-    
+
     if (data.success && data.health?.providers) {
       const activeProvider = data.activeProvider;
       const providerHealth = data.health.providers[activeProvider];
-      
+
       return {
-        connected: providerHealth?.connected || false,
+        connected: providerHealth?.connected || providerHealth?.isConnected || false,
         state: providerHealth?.state || 'disconnected',
         provider: activeProvider
       };
     }
-    
+
     return {
       connected: false,
       state: 'disconnected',
       provider: null
     };
-  },
-
-  // Obtenir la configuration des providers
-  async getProvidersConfig() {
-    const response = await providerApi.get('/providers/config');
-    return response.data;
-  },
-
-  // Mettre à jour la configuration d'un provider
-  async updateProviderConfig(provider, config) {
-    const response = await providerApi.put(`/providers/config/${provider}`, config);
-    return response.data;
-  },
-
-  // Définir le provider par défaut
-  async setDefaultProvider(provider) {
-    const response = await providerApi.post('/providers/default', { provider });
-    return response.data;
-  },
-
-  // ==================== YAML Config API ====================
-
-  // Obtenir la configuration YAML complète
-  async getYamlConfig() {
-    const response = await providerApi.get('/config');
-    return response.data;
-  },
-
-  // Obtenir les providers par catégorie (whatsapp, sms, voip)
-  async getProvidersByType(type) {
-    const response = await providerApi.get(`/config/providers/${type}`);
-    return response.data;
-  },
-
-  // Obtenir les types de providers disponibles
-  async getProviderTypes() {
-    const response = await providerApi.get('/config/provider-types');
-    return response.data;
-  },
-
-  // Ajouter un nouveau provider
-  async addProvider(type, providerData) {
-    const response = await providerApi.post(`/config/providers/${type}`, providerData);
-    return response.data;
-  },
-
-  // Modifier un provider existant
-  async updateProvider(type, id, updates) {
-    const response = await providerApi.put(`/config/providers/${type}/${id}`, updates);
-    return response.data;
-  },
-
-  // Supprimer un provider
-  async deleteProvider(type, id) {
-    const response = await providerApi.delete(`/config/providers/${type}/${id}`);
-    return response.data;
-  },
-
-  // Toggle actif/inactif un provider
-  async toggleProvider(type, id) {
-    const response = await providerApi.patch(`/config/providers/${type}/${id}/toggle`);
-    return response.data;
-  },
-
-  // Recharger la configuration
-  async reloadConfig() {
-    const response = await providerApi.post('/config/reload');
-    return response.data;
-  },
-
-  // Obtenir les règles de compliance
-  async getComplianceRules() {
-    const response = await providerApi.get('/config/compliance');
-    return response.data;
   }
 };
 

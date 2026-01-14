@@ -891,7 +891,7 @@ class VoIPService {
   /**
    * Clé localStorage pour mémoriser l'état de la permission micro
    */
-  static PERMISSION_STORAGE_KEY = 'lekip_mic_permission';
+  static PERMISSION_STORAGE_KEY = 'homenichat_mic_permission';
 
   /**
    * Vérifie l'état actuel de la permission micro (sans déclencher de prompt)

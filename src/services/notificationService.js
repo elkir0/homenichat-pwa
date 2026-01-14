@@ -62,7 +62,7 @@ class NotificationService {
         console.log('🔔 Permission granted, showing test notification');
 
         // Afficher une notification de test
-        this.showNotification('L\'ekip-Chat', {
+        this.showNotification('Homenichat', {
           body: 'Les notifications sont activées ! 🎉',
           icon: '/logo-192.png'
         });
@@ -202,7 +202,7 @@ class NotificationService {
           body: options.body || '',
           icon: options.icon || '/logo-192.png',
           badge: options.badge || '/logo-192.png',
-          tag: options.tag || 'lekip-notification',
+          tag: options.tag || 'homenichat-notification',
           data: options.data || {},
           vibrate: options.vibrate || [200, 100, 200],
           requireInteraction: options.requireInteraction || false,

@@ -16,6 +16,49 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
   const [viewerImage, setViewerImage] = useState(null);
+  const [reactionMessage, setReactionMessage] = useState(null); // Message pour lequel afficher le picker de réactions
+  const longPressTimerRef = useRef(null);
+
+  // Emojis rapides pour les réactions
+  const quickReactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+
+  // Gérer le long-press pour les réactions
+  const handleMessageLongPress = (message, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setReactionMessage(message);
+    // Vibration feedback sur mobile
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+  };
+
+  const handleTouchStart = (message, e) => {
+    longPressTimerRef.current = setTimeout(() => {
+      handleMessageLongPress(message, e);
+    }, 500); // 500ms pour déclencher le long-press
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
+  // Envoyer une réaction
+  const handleSendReaction = async (emoji) => {
+    if (!reactionMessage || !chat) return;
+
+    const messageId = reactionMessage.key?.id || reactionMessage.id;
+    try {
+      await whatsappApi.sendReaction(chat.id, messageId, emoji);
+      console.log('✅ Réaction envoyée:', emoji, 'sur message:', messageId);
+    } catch (error) {
+      console.error('❌ Erreur envoi réaction:', error);
+    }
+    setReactionMessage(null);
+  };
 
   // Détecter si c'est un draft (nouvelle conversation pas encore envoyée)
   const isDraftChat = chat?.isDraft === true;
@@ -415,6 +458,17 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
 
       setMessages(sortedMessages);
       setError(null);
+
+      // Marquer la conversation comme lue après chargement des messages
+      if (sortedMessages.length > 0) {
+        try {
+          await whatsappApi.markAsRead(chat.id);
+          console.log('✅ Chat marqué comme lu:', chat.id);
+        } catch (markError) {
+          // Erreur silencieuse - ne pas bloquer l'UI
+          console.warn('⚠️ Impossible de marquer le chat comme lu:', markError);
+        }
+      }
 
     } catch (err) {
       console.error('Erreur chargement messages:', err);
@@ -879,8 +933,8 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
     return (
       <div className="chat-window-empty">
         <div className="empty-state">
-          <img src="/logo-192.png" alt="L'ekip-Chat" className="empty-logo" />
-          <h2>L'ekip-Chat</h2>
+          <img src="/logo-192.png" alt="Homenichat" className="empty-logo" />
+          <h2>Homenichat</h2>
           <p>Sélectionnez une conversation pour commencer</p>
         </div>
       </div>
@@ -1020,7 +1074,13 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
                   key={`${message.key?.id || message.id}-${index}`}
                   className={`message ${message.key?.fromMe ? 'sent' : 'received'}`}
                 >
-                  <div className="message-bubble">
+                  <div
+                    className="message-bubble"
+                    onTouchStart={(e) => handleTouchStart(message, e)}
+                    onTouchEnd={handleTouchEnd}
+                    onTouchMove={handleTouchEnd}
+                    onContextMenu={(e) => handleMessageLongPress(message, e)}
+                  >
                     {isMediaMessage(message) ? (
                       renderMediaMessage(message)
                     ) : messageText !== null ? (
@@ -1090,6 +1150,38 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
             setViewerImage(null);
           }}
         />
+      )}
+
+      {/* Reaction Picker */}
+      {reactionMessage && (
+        <div className="reaction-picker-overlay" onClick={() => setReactionMessage(null)}>
+          <div className="reaction-picker" onClick={(e) => e.stopPropagation()}>
+            <div className="reaction-picker-header">
+              <span>Réagir au message</span>
+              <button className="close-btn" onClick={() => setReactionMessage(null)}>
+                <span className="material-icons">close</span>
+              </button>
+            </div>
+            <div className="reaction-picker-emojis">
+              {quickReactions.map((emoji) => (
+                <button
+                  key={emoji}
+                  className="reaction-btn"
+                  onClick={() => handleSendReaction(emoji)}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+            <div className="reaction-picker-preview">
+              <span className="preview-label">Message:</span>
+              <span className="preview-text">
+                {getMessageText(reactionMessage)?.substring(0, 50) || '[Media]'}
+                {(getMessageText(reactionMessage)?.length || 0) > 50 ? '...' : ''}
+              </span>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

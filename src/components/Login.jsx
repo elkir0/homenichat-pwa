@@ -71,7 +71,7 @@ function Login({ onLogin }) {
             alt="ChiroStéo"
             className="login-logo"
           />
-          <h1>L'ekip-Chat</h1>
+          <h1>Homenichat</h1>
           <p>Connectez-vous pour continuer</p>
         </div>
 
@@ -122,7 +122,7 @@ function Login({ onLogin }) {
         </form>
 
         <div className="login-footer">
-          <p>Powered by L'ekip-Chat v0.9.7</p>
+          <p>Powered by Homenichat v1.0.0</p>
         </div>
       </div>
     </div>

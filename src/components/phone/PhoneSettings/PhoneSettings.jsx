@@ -15,7 +15,7 @@ import './PhoneSettings.css';
  * - Mode silencieux auto (toggle + heures)
  */
 
-const STORAGE_KEY = 'lekip_phone_settings';
+const STORAGE_KEY = 'homenichat_phone_settings';
 
 // Sonneries disponibles (générées via Web Audio API)
 const RINGTONES = RingtoneService.getRingtoneList();

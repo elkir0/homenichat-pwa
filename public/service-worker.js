@@ -1,6 +1,6 @@
-// Service Worker pour L'ekip-Chat PWA
-const CACHE_VERSION = '0.9.12';
-const CACHE_NAME = `lekip-chat-v${CACHE_VERSION}`;
+// Service Worker pour Homenichat PWA
+const CACHE_VERSION = '1.0.0';
+const CACHE_NAME = `homenichat-v${CACHE_VERSION}`;
 const urlsToCache = [
   '/',
   '/index.html',
@@ -127,11 +127,11 @@ self.addEventListener('message', event => {
 
 // Notification push
 self.addEventListener('push', event => {
-  let title = "L'ekip-Chat";
+  let title = "Homenichat";
   let body = 'Nouveau message';
   let icon = '/logo-192.png';
   let badge = '/logo-192.png';
-  let tag = 'lekip-notification';
+  let tag = 'homenichat-notification';
   let data = {};
   let actions = [];
   let requireInteraction = false;
@@ -292,7 +292,7 @@ async function sendQueuedMessages() {
     // Envoyer chaque message
     for (const msg of messages) {
       try {
-        const response = await fetch('/api/evolution/message/sendText/lekipchat', {
+        const response = await fetch('/api/chats/messages', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -331,7 +331,7 @@ async function sendQueuedMessages() {
 // Helper pour ouvrir IndexedDB
 function openDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('LekipChatDB', 1);
+    const request = indexedDB.open('HomenichatDB', 1);
     
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);

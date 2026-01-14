@@ -1,7 +1,7 @@
 {
-  "name": "L'ekip-Chat",
-  "short_name": "L'ekip-Chat",
-  "description": "Interface de gestion WhatsApp via Evolution API avec simulation humaine",
+  "name": "Homenichat",
+  "short_name": "Homenichat",
+  "description": "Unified Communication Platform - WhatsApp, SMS, VoIP",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -21,7 +21,7 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "medical"],
+  "categories": ["productivity", "communication"],
   "prefer_related_applications": false,
   "scope": "/",
   "shortcuts": [
