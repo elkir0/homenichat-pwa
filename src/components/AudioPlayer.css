@@ -1,0 +1,198 @@
+/* Audio Player Styles */
+.audio-player {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  margin: 4px 0;
+  max-width: 320px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.audio-player.from-me {
+  background: #dcf8c6;
+  border-color: #c4e8a6;
+}
+
+.audio-player.from-them {
+  background: #ffffff;
+  border-color: #e0e0e0;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.play-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  min-width: 40px;
+  height: 40px;
+}
+
+.play-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.play-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.play-button .material-icons {
+  font-size: 24px;
+  color: #25d366;
+}
+
+.audio-progress-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Waveform Visual */
+.waveform {
+  width: 100%;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.waveform-bars {
+  display: flex;
+  align-items: end;
+  gap: 2px;
+  height: 100%;
+  width: 100%;
+}
+
+.waveform-bar {
+  background: #25d366;
+  width: 3px;
+  min-height: 4px;
+  border-radius: 2px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.waveform-bar:hover {
+  opacity: 1;
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #25d366;
+  border-radius: 2px;
+  transition: width 0.1s ease;
+}
+
+.progress-handle {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: #25d366;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: left 0.1s ease;
+}
+
+/* Time Display */
+.time-display {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.current-time {
+  font-weight: 500;
+  color: #25d366;
+}
+
+.duration {
+  color: #999;
+}
+
+/* Error State */
+.audio-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d32f2f;
+  font-size: 12px;
+  width: 100%;
+}
+
+.audio-error .material-icons {
+  font-size: 16px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .audio-player {
+    max-width: 280px;
+    padding: 10px;
+  }
+  
+  .play-button {
+    min-width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+  
+  .play-button .material-icons {
+    font-size: 20px;
+  }
+  
+  .progress-handle {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Dark mode support (if implemented later) */
+@media (prefers-color-scheme: dark) {
+  .audio-player.from-them {
+    background: #2a2a2a;
+    border-color: #404040;
+    color: #e0e0e0;
+  }
+  
+  .time-display {
+    color: #b0b0b0;
+  }
+  
+  .duration {
+    color: #808080;
+  }
+  
+  .progress-bar {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}

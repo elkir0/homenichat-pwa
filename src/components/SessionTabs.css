@@ -1,0 +1,155 @@
+.session-tabs-container {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.session-tabs {
+  min-height: 80px;
+}
+
+.session-tabs .MuiTabs-flexContainer {
+  align-items: stretch;
+}
+
+.session-tab {
+  min-width: 200px;
+  max-width: 300px;
+  text-transform: none;
+  padding: 8px 16px;
+}
+
+.session-tab.disabled {
+  opacity: 0.6;
+}
+
+.session-tab-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 4px;
+}
+
+.session-tab-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.session-tab-header svg {
+  font-size: 20px;
+}
+
+.session-name {
+  flex: 1;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-tab-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  font-size: 12px;
+}
+
+.phone-number {
+  color: #666;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.add-session-tab {
+  min-width: 150px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.add-session-tab:hover {
+  opacity: 1;
+}
+
+/* États des sessions */
+.session-tab.Mui-selected {
+  background-color: #e3f2fd;
+  border-bottom: 2px solid #2196f3;
+}
+
+.session-tab .MuiChip-root {
+  height: 20px;
+  font-size: 11px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .session-tab {
+    min-width: 150px;
+  }
+  
+  .session-tab-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}
+
+/* Animation de changement de session */
+.session-tab {
+  transition: all 0.3s ease;
+}
+
+.session-tab:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Indicateur de session active */
+.session-tab.Mui-selected::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #2196f3;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Menu contextuel personnalisé */
+.MuiMenu-paper {
+  margin-top: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Dialog de création */
+.MuiDialog-paper {
+  border-radius: 12px;
+}
+
+/* Icônes de provider */
+.session-tab-header svg[data-testid="WhatsAppIcon"] {
+  color: #25d366;
+}
+
+.session-tab-header svg[data-testid="CloudIcon"] {
+  color: #1877f2;
+}

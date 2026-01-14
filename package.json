@@ -1,0 +1,47 @@
+{
+  "name": "lekip-chat-frontend",
+  "version": "0.9.11",
+  "description": "Frontend PWA pour L'ekip-Chat",
+  "private": true,
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.0",
+    "@mui/material": "^5.15.0",
+    "axios": "^1.11.0",
+    "core-js": "^3.44.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "react-scripts": "5.0.1",
+    "regenerator-runtime": "^0.14.1",
+    "sip.js": "^0.21.2",
+    "socket.io-client": "^4.7.2",
+    "whatwg-fetch": "^3.6.20"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      "> 0.2%",
+      "last 5 versions",
+      "iOS >= 10",
+      "Safari >= 10"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

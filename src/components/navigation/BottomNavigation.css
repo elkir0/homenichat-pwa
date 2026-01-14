@@ -1,0 +1,175 @@
+/* ============================================
+   BOTTOM NAVIGATION - L'ekip-Chat BETA
+   Navigation principale avec 3 onglets
+   ============================================ */
+
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--surface-color, #ffffff);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  /* Safe area pour iPhone X+ */
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Item de navigation */
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  min-height: 56px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary, #5f6368);
+  transition: color 0.2s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.bottom-nav-item:active {
+  transform: scale(0.95);
+}
+
+/* État actif */
+.bottom-nav-item.active {
+  color: var(--primary-color, #1a73e8);
+}
+
+.bottom-nav-item.active .bottom-nav-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Wrapper icône pour positionner le badge */
+.bottom-nav-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icône */
+.bottom-nav-icon {
+  font-size: 24px;
+  margin-bottom: 2px;
+  transition: font-variation-settings 0.2s ease;
+}
+
+/* Label */
+.bottom-nav-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Badge de notification */
+.bottom-nav-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--danger-color, #d32f2f);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  animation: badge-pop 0.3s ease;
+}
+
+@keyframes badge-pop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Indicateur de tab actif (ligne sous l'icône) */
+.bottom-nav-item.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background: var(--primary-color, #1a73e8);
+  border-radius: 0 0 3px 3px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablette et desktop - navigation plus large */
+@media (min-width: 768px) {
+  .bottom-navigation {
+    /* Sur desktop, on pourrait cacher ou repositionner */
+    /* Pour l'instant on garde en bas */
+    max-width: 500px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+/* Paysage sur mobile - réduire la hauteur */
+@media (max-height: 500px) {
+  .bottom-navigation {
+    height: 48px;
+    min-height: 48px;
+  }
+
+  .bottom-nav-item {
+    min-height: 48px;
+    padding: 4px 0;
+  }
+
+  .bottom-nav-icon {
+    font-size: 22px;
+  }
+
+  .bottom-nav-label {
+    font-size: 10px;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITÉ
+   ============================================ */
+
+/* Focus visible pour navigation clavier */
+.bottom-nav-item:focus-visible {
+  outline: 2px solid var(--primary-color, #1a73e8);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+/* Préférence mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-item,
+  .bottom-nav-badge {
+    transition: none;
+    animation: none;
+  }
+}

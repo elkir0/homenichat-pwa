@@ -1,0 +1,690 @@
+/* ============================================
+   PHONE VIEW - Layout 2 colonnes (comme Chat)
+   ============================================ */
+
+.phone-view {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background: var(--background-color, #f5f5f5);
+}
+
+/* ============================================
+   SIDEBAR GAUCHE - Historique des appels
+   ============================================ */
+
+.phone-sidebar {
+  width: 360px;
+  min-width: 360px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-color, #ffffff);
+  border-right: 1px solid var(--border-color, #e0e0e0);
+}
+
+/* Header sidebar */
+.phone-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary-color, #1a73e8) 0%, #0d47a1 100%);
+  color: white;
+}
+
+/* Mobile: padding right pour le hamburger menu */
+@media (max-width: 768px) {
+  .phone-sidebar-header {
+    padding-right: 70px;
+  }
+}
+
+.phone-sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.phone-sidebar-title .material-icons {
+  font-size: 28px;
+}
+
+.phone-sidebar-title h1 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.connection-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 4px;
+}
+
+.connection-dot.connected {
+  background: #4caf50;
+  box-shadow: 0 0 6px #4caf50;
+}
+
+.connection-dot.disconnected {
+  background: #f44336;
+  box-shadow: 0 0 6px #f44336;
+}
+
+.phone-settings-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s;
+}
+
+.phone-settings-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Barre de recherche */
+.phone-search {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--surface-color, #ffffff);
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.phone-search .search-icon {
+  color: var(--text-secondary, #5f6368);
+  margin-right: 12px;
+}
+
+.phone-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  color: var(--text-primary, #202124);
+}
+
+.phone-search-input::placeholder {
+  color: var(--text-secondary, #5f6368);
+}
+
+.search-clear-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text-secondary, #5f6368);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-clear-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Contenu sidebar (liste des appels) */
+.phone-sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Tabs navigation (Historique / Contacts) */
+.phone-sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  background: var(--surface-color, #ffffff);
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary, #5f6368);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.sidebar-tab:hover {
+  color: var(--text-primary, #202124);
+  background: rgba(0,0,0,0.02);
+}
+
+.sidebar-tab.active {
+  color: var(--primary-color, #1a73e8);
+}
+
+.sidebar-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 3px;
+  background: var(--primary-color, #1a73e8);
+  border-radius: 3px 3px 0 0;
+}
+
+/* ============================================
+   CONTACTS LIST - Liste des contacts
+   ============================================ */
+
+.contacts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.contact-item:hover {
+  background: rgba(0,0,0,0.02);
+}
+
+.contact-item:active {
+  background: rgba(0,0,0,0.05);
+}
+
+.contact-item .contact-avatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  background: var(--primary-color, #1a73e8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  margin-bottom: 0;
+}
+
+.contact-item .contact-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contact-item .contact-avatar .material-icons {
+  font-size: 24px;
+  color: white;
+}
+
+.contact-item .contact-info {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.contact-item .contact-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-primary, #202124);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-item .contact-number {
+  font-size: 13px;
+  color: var(--text-secondary, #5f6368);
+  margin-top: 2px;
+}
+
+.contact-item .contact-call-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--secondary-color, #34a853);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.contact-item .contact-call-btn:hover {
+  background: rgba(52, 168, 83, 0.1);
+}
+
+.empty-state-contacts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--text-secondary, #5f6368);
+  font-size: 14px;
+}
+
+/* ============================================
+   PANEL DROIT - Dialpad / Contact
+   ============================================ */
+
+.phone-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color, #f5f5f5);
+  overflow: hidden;
+}
+
+/* Dialpad centré */
+.phone-main-dialpad {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Vue détail contact */
+.phone-main-contact {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-color, #ffffff);
+}
+
+.contact-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  background: var(--surface-color, #ffffff);
+}
+
+.contact-header .back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary, #202124);
+}
+
+.contact-header .back-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.contact-header h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--text-primary, #202124);
+}
+
+.contact-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.contact-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--primary-color, #1a73e8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.contact-avatar .material-icons {
+  font-size: 60px;
+  color: white;
+}
+
+.contact-number {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--text-primary, #202124);
+  margin: 0 0 8px 0;
+}
+
+.contact-call-info {
+  font-size: 14px;
+  color: var(--text-secondary, #5f6368);
+  margin: 0;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  justify-content: center;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+.contact-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.contact-action-btn:active {
+  transform: scale(0.95);
+}
+
+.contact-action-btn.call {
+  background: #34a853;
+  color: white;
+}
+
+.contact-action-btn.call:hover {
+  background: #2e7d32;
+}
+
+.contact-action-btn.message {
+  background: var(--primary-color, #1a73e8);
+  color: white;
+}
+
+.contact-action-btn.message:hover {
+  background: var(--primary-dark, #1557b0);
+}
+
+.contact-action-btn .material-icons {
+  font-size: 28px;
+}
+
+.contact-action-btn span:last-child {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* État vide */
+.phone-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #5f6368);
+}
+
+.phone-empty-state .material-icons {
+  font-size: 64px;
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   DESKTOP - Layout optimisé grands écrans
+   ============================================ */
+
+@media (min-width: 769px) {
+  .phone-view {
+    /* Remplir tout l'espace disponible - PAS de max-width/margin */
+    height: 100%;
+    background: var(--surface-color, #ffffff);
+  }
+
+  .phone-sidebar {
+    width: 320px;
+    min-width: 320px;
+    border-right: 1px solid var(--border-color, #e0e0e0);
+  }
+
+  .phone-main {
+    background: var(--background-color, #f5f5f5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Dialpad centré dans le panel droit - taille généreuse */
+  .phone-main-dialpad {
+    width: 100%;
+    max-width: 450px;
+    height: 100%;
+    max-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  /* Empty state amélioré desktop */
+  .phone-empty-state {
+    background: var(--surface-color, #ffffff);
+  }
+}
+
+/* ============================================
+   FAB DIALPAD - Bouton flottant mobile
+   ============================================ */
+
+.phone-fab-dialpad {
+  display: none; /* Caché par défaut (desktop) */
+}
+
+/* ============================================
+   DIALPAD MOBILE HEADER
+   ============================================ */
+
+.dialpad-mobile-header {
+  display: none; /* Caché par défaut (desktop) */
+}
+
+/* ============================================
+   RESPONSIVE - Mobile
+   ============================================ */
+
+@media (max-width: 768px) {
+  .phone-view {
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .phone-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    flex: 1;
+    border-right: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .phone-main {
+    display: none; /* Sur mobile, on affiche une vue à la fois */
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* FAB visible sur mobile - au dessus de la bottom nav */
+  .phone-fab-dialpad {
+    display: flex;
+    position: absolute;
+    bottom: 80px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-color, #1a73e8);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .phone-fab-dialpad:active {
+    transform: scale(0.95);
+  }
+
+  .phone-fab-dialpad .material-icons {
+    font-size: 24px;
+  }
+
+  /* Header dialpad visible sur mobile */
+  .dialpad-mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    /* Padding right pour éviter le chevauchement avec le hamburger menu */
+    padding-right: 70px;
+    background: linear-gradient(135deg, var(--primary-color, #1a73e8) 0%, #0d47a1 100%);
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .dialpad-mobile-header .back-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+  }
+
+  .dialpad-mobile-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    flex: 1;
+  }
+
+  .dialpad-mobile-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dialpad-mobile-header-actions .connection-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dialpad-mobile-header-actions .connection-dot.connected {
+    background: #4caf50;
+    box-shadow: 0 0 6px #4caf50;
+  }
+
+  .dialpad-mobile-header-actions .connection-dot.disconnected {
+    background: #f44336;
+    box-shadow: 0 0 6px #f44336;
+  }
+
+  .mobile-settings-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .mobile-settings-btn:hover,
+  .mobile-settings-btn:active {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .mobile-settings-btn .material-icons {
+    font-size: 20px;
+  }
+
+  /* En mode dialpad sur mobile */
+  .phone-view.show-main .phone-sidebar {
+    display: none;
+  }
+
+  .phone-view.show-main .phone-main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: var(--surface-color, #ffffff);
+    /* Pas de position absolute - utiliser le flux flex normal */
+  }
+
+  .phone-view.show-main .phone-main-dialpad {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    max-width: none;
+    max-height: none;
+    width: 100%;
+    min-height: 0; /* Important pour flex scroll */
+  }
+
+  .phone-view.show-main .phone-main-dialpad .dialpad {
+    flex: 1;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: none;
+    width: 100%;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+    align-items: center; /* Centre horizontalement le contenu */
+  }
+
+  /* Force le centrage du clavier sur mobile */
+  .phone-view.show-main .phone-main-dialpad .dialpad .dialpad-keys {
+    width: 264px; /* 3 colonnes de 80px + 2 gaps de 12px */
+    max-width: 264px;
+    grid-template-columns: repeat(3, 80px);
+    margin: 0 auto;
+    padding: 8px 0;
+  }
+}

@@ -1,0 +1,32 @@
+.version-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  margin-top: auto;
+  /* Push to bottom in flex container */
+  border-top: 1px solid var(--border-color);
+}
+
+.version-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.version-number {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-family: monospace;
+}
+
+.version-date {
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border-color);
+}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#1a73e8" />
+    <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
+    <meta name="description" content="L'ekip-Chat - Interface moderne pour WhatsApp" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="L'ekip-Chat">
+    
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo-192.png" />
+    
+    <!-- Local Material Icons & Roboto -->
+    <link href="%PUBLIC_URL%/css/local-fonts.css" rel="stylesheet">
+    
+    <title>L'ekip-Chat</title>
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f5f5f5;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      #root {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #1a73e8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease-out;
+      }
+      
+      .splash-screen img {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      
+      .splash-screen h1 {
+        color: white;
+        font-size: 24px;
+        font-weight: 500;
+      }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      
+      /* Prevent text selection on iOS */
+      * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      
+      input, textarea {
+        -webkit-user-select: text;
+        -khtml-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>Vous devez activer JavaScript pour utiliser L'ekip-Chat.</noscript>
+    
+    <!-- Splash screen -->
+    <div class="splash-screen" id="splash">
+      <img src="%PUBLIC_URL%/logo-192.png" alt="L'ekip-Chat Logo" />
+      <h1>L'ekip-Chat</h1>
+    </div>
+    
+    <div id="root"></div>
+    
+    <script>
+      // Test de compatibilité ES6
+      try {
+        eval('const test = () => {}; const {a} = {a:1}; `template`');
+      } catch (e) {
+        document.getElementById('root').innerHTML = '<div style="padding: 20px; text-align: center;"><h2>Navigateur non compatible</h2><p>Veuillez mettre à jour votre navigateur.</p></div>';
+      }
+      
+      // Gestion du splash screen
+      function hideSplashScreen() {
+        const splash = document.getElementById('splash');
+        if (splash) {
+          splash.style.opacity = '0';
+          setTimeout(() => {
+            splash.style.display = 'none';
+          }, 300);
+        }
+      }
+      
+      // Gestion des erreurs de chargement
+      window.addEventListener('error', function(e) {
+        if (e.filename && e.filename.includes('/static/js/')) {
+          console.error('Bundle error:', e.message, 'at', e.filename + ':' + e.lineno);
+          // Afficher un message d'erreur si l'app ne charge pas
+          setTimeout(function() {
+            if (!window.ReactLoaded) {
+              const root = document.getElementById('root');
+              if (root && !root.hasChildNodes()) {
+                root.innerHTML = '<div style="padding: 20px; text-align: center;"><h2>Erreur de chargement</h2><p>L\'application n\'a pas pu se charger. Veuillez rafraîchir la page.</p><button onclick="location.reload()" style="padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 4px;">Rafraîchir</button></div>';
+              }
+            }
+          }, 3000);
+        }
+      });
+      
+      // Cacher le splash screen quand l'app est chargée
+      window.addEventListener('load', () => {
+        setTimeout(hideSplashScreen, 1500);
+      });
+      
+      // Fallback pour cacher le splash screen
+      setTimeout(hideSplashScreen, 5000);
+      
+      // Flag pour savoir si React est chargé
+      window.ReactLoaded = false;
+      
+      // Empêcher le zoom par pinch sur iOS
+      document.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      });
+    </script>
+  </body>
+</html>

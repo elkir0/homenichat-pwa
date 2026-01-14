@@ -1,0 +1,490 @@
+/* ============================================
+   CALL SCREEN - L'ekip-Chat BETA
+   Écran d'appel plein écran (overlay)
+   ============================================ */
+
+.call-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  /* Safe areas */
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  animation: call-screen-enter 0.3s ease-out;
+}
+
+@keyframes call-screen-enter {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.call-screen-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 24px;
+}
+
+/* ============================================
+   CALL INFO - Avatar et informations
+   ============================================ */
+
+.call-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.call-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.call-avatar .material-icons {
+  font-size: 56px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Animation pulsation pour appel entrant/sortant */
+.call-avatar.pulsing {
+  animation: avatar-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes avatar-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 20px rgba(52, 168, 83, 0);
+  }
+}
+
+.call-name {
+  font-size: 28px;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.5px;
+}
+
+.call-number {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px 0;
+}
+
+.call-status {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ============================================
+   INCOMING CALL ACTIONS - Répondre / Refuser
+   ============================================ */
+
+.call-incoming-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 40px 20px;
+}
+
+.call-action-large {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  padding: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.call-action-large .material-icons {
+  font-size: 36px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s;
+}
+
+.call-action-large:active .material-icons {
+  transform: scale(0.95);
+}
+
+.call-action-large.reject .material-icons {
+  background: #d32f2f;
+}
+
+.call-action-large.answer .material-icons {
+  background: #34a853;
+  animation: ring-shake 0.5s ease-in-out infinite;
+}
+
+@keyframes ring-shake {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.call-action-large .action-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ============================================
+   OUTGOING CALL - En attente
+   ============================================ */
+
+.call-outgoing-actions {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* ============================================
+   CALL CONTROLS - Contrôles pendant l'appel
+   ============================================ */
+
+.call-controls {
+  padding: 20px 0;
+}
+
+.call-controls-row {
+  display: flex;
+  justify-content: space-around;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.call-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 16px;
+  padding: 16px;
+  min-width: 72px;
+  cursor: pointer;
+  color: white;
+  transition: background 0.2s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.call-control:active {
+  transform: scale(0.95);
+}
+
+.call-control.active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.call-control .material-icons {
+  font-size: 28px;
+}
+
+.call-control .control-label {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* ============================================
+   END CALL BUTTON - Raccrocher
+   ============================================ */
+
+.call-end-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.call-end-btn {
+  width: 72px;
+  height: 72px;
+  border: none;
+  background: #d32f2f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 4px 20px rgba(211, 47, 47, 0.4);
+}
+
+.call-end-btn .material-icons {
+  font-size: 36px;
+}
+
+.call-end-btn:active {
+  transform: scale(0.95);
+  background: #b71c1c;
+}
+
+/* ============================================
+   MESSAGE BUTTON - Répondre par message
+   ============================================ */
+
+.call-message-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 20px auto 0;
+  transition: background 0.2s;
+}
+
+.call-message-btn:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.call-message-btn .material-icons {
+  font-size: 20px;
+}
+
+/* ============================================
+   DTMF DIALPAD OVERLAY
+   ============================================ */
+
+.call-dtmf-overlay {
+  position: absolute;
+  bottom: 180px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 16px;
+  padding: 16px;
+  animation: dtmf-slide-up 0.2s ease-out;
+}
+
+@keyframes dtmf-slide-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.call-dtmf-keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.dtmf-key {
+  width: 56px;
+  height: 56px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.dtmf-key:active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   SCREEN LOCK OVERLAY - Évite les clics accidentels
+   ============================================ */
+
+.call-screen-lock {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  animation: lock-fade-in 0.3s ease-out;
+  /* Empêcher la sélection et le scroll */
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes lock-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lock-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lock-indicator .material-icons {
+  font-size: 48px;
+  opacity: 0.6;
+  animation: lock-pulse 2s ease-in-out infinite;
+}
+
+@keyframes lock-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.lock-indicator p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.lock-call-info {
+  text-align: center;
+}
+
+.lock-duration {
+  font-size: 48px;
+  font-weight: 200;
+  color: white;
+  margin: 0 0 8px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.lock-name {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Petit écran */
+@media (max-height: 600px) {
+  .call-screen-content {
+    padding: 20px 16px;
+  }
+
+  .call-avatar {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+  }
+
+  .call-avatar .material-icons {
+    font-size: 44px;
+  }
+
+  .call-name {
+    font-size: 24px;
+  }
+
+  .call-action-large .material-icons {
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+  }
+
+  .call-end-btn {
+    width: 64px;
+    height: 64px;
+  }
+
+  .call-control {
+    padding: 12px;
+    min-width: 64px;
+  }
+}
+
+/* Landscape */
+@media (orientation: landscape) and (max-height: 500px) {
+  .call-screen-content {
+    flex-direction: row;
+    padding: 16px;
+  }
+
+  .call-info {
+    flex: 1;
+  }
+
+  .call-avatar {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 12px;
+  }
+
+  .call-controls,
+  .call-incoming-actions,
+  .call-end-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .call-avatar.pulsing,
+  .call-action-large.answer .material-icons {
+    animation: none;
+  }
+
+  .call-screen,
+  .call-dtmf-overlay {
+    animation: none;
+  }
+}

@@ -1,0 +1,367 @@
+/* Message Input Styles */
+.message-input {
+  background-color: var(--surface-color);
+  padding: 8px 16px;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.message-input.urgent-mode {
+  background-color: #ffebee;
+  border-top: 2px solid #d32f2f;
+}
+
+/* Input Form */
+.input-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  position: relative;
+  /* Ensure stacking context */
+  z-index: 20;
+  /* Higher than emojis */
+}
+
+/* Input Actions */
+.input-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  z-index: 21;
+}
+
+.input-actions .btn {
+  color: var(--text-secondary);
+  padding: 8px;
+}
+
+.input-actions .btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.input-actions .btn.urgent-active {
+  color: #d32f2f;
+  background-color: rgba(211, 47, 47, 0.1);
+}
+
+/* Input Wrapper */
+.input-wrapper {
+  flex: 1;
+  position: relative;
+  background-color: #4a4a4a;
+  border-radius: 24px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #5a5a5a;
+}
+
+.urgent-mode .input-wrapper {
+  background-color: white;
+  border: 1px solid #d32f2f;
+}
+
+/* Message Textarea */
+.message-textarea {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+  /* Forcer la couleur blanche avec maximum de spécificité */
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  max-height: 120px;
+  min-height: 24px;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+
+/* Override pour s'assurer que la couleur reste blanche */
+.input-wrapper .message-textarea,
+.message-input .input-wrapper .message-textarea {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.message-textarea::placeholder {
+  color: #b0b0b0;
+  opacity: 0.8;
+}
+
+.urgent-mode .message-textarea::placeholder {
+  color: #d32f2f;
+}
+
+/* Auto-resize textarea */
+.message-textarea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.message-textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.message-textarea::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+/* Typing Preview (Debug) */
+.typing-preview {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+/* Send Button */
+.btn-send {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-send:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.btn-send:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.urgent-mode .btn-send {
+  background-color: #d32f2f;
+}
+
+.urgent-mode .btn-send:hover:not(:disabled) {
+  background-color: #b71c1c;
+}
+
+/* Sending Indicator */
+.sending-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.sending-indicator .material-icons {
+  font-size: 18px;
+}
+
+/* Rotating animation */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating {
+  animation: rotate 1s linear infinite;
+}
+
+/* Quick Emojis */
+.quick-emojis {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.quick-emojis::-webkit-scrollbar {
+  height: 4px;
+}
+
+.quick-emojis::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quick-emojis::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.emoji-btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s, transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.emoji-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: scale(1.1);
+}
+
+.emoji-btn:active {
+  transform: scale(0.9);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .message-input {
+    padding: 8px 12px;
+  }
+
+  .input-wrapper {
+    padding: 6px 12px;
+  }
+
+  .message-textarea {
+    font-size: 16px;
+    /* Empêche le zoom sur iOS */
+  }
+
+  .quick-emojis {
+    padding: 6px 0 0;
+  }
+
+  .emoji-btn {
+    padding: 6px;
+    font-size: 18px;
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) {
+  .message-textarea {
+    max-height: 60px;
+  }
+
+  .quick-emojis {
+    display: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .message-input {
+    background-color: #121212;
+  }
+
+  .input-wrapper {
+    background-color: #2a2a2a;
+    border-color: #404040;
+  }
+
+  .message-textarea {
+    color: #e0e0e0 !important;
+    -webkit-text-fill-color: #e0e0e0 !important;
+  }
+
+  .message-input.urgent-mode {
+    background-color: #2e0000;
+  }
+
+  .urgent-mode .input-wrapper {
+    background-color: #3e0000;
+    border-color: #ff5252;
+  }
+}
+
+/* Styles pour l'enregistrement vocal */
+.btn-send.recording {
+  background-color: #ff4444;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background-color: #fff3e0;
+  border-radius: 20px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.recording-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #ff4444;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.btn-cancel {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-cancel:hover {
+  color: #ff4444;
+}

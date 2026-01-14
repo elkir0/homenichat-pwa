@@ -1,0 +1,273 @@
+/* VoIP Modal Specific Styles */
+.modal-content.voip-modal {
+    max-width: 420px;
+}
+
+.modal-content.voip-modal.voip-modal-large {
+    max-width: 520px;
+}
+
+/* VoIP Sections */
+.voip-section {
+    background: #16162a;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #3d3d5c;
+}
+
+.voip-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px 0;
+    color: #00d9ff;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.voip-section-title .material-icons {
+    font-size: 18px;
+}
+
+/* 2 Column Layout */
+.form-row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 480px) {
+    .form-row-2col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Use Defaults Button */
+.btn-use-defaults {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid #3d3d5c;
+    color: #b0b0b0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+}
+
+.btn-use-defaults:hover:not(:disabled) {
+    background: rgba(0, 217, 255, 0.1);
+    border-color: #00d9ff;
+    color: #00d9ff;
+}
+
+.btn-use-defaults:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-use-defaults .material-icons {
+    font-size: 16px;
+}
+
+/* Loading State */
+.loading-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary, #8e8ea0);
+}
+
+/* Server Info Box */
+.server-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-secondary, #16162a);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color, #2d2d44);
+}
+
+.server-info .material-icons {
+    color: var(--accent-color, #00d9ff);
+    font-size: 24px;
+}
+
+.server-label {
+    font-size: 0.75rem;
+    color: var(--text-muted, #666);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.server-value {
+    font-size: 0.95rem;
+    color: var(--text-primary, #fff);
+    font-family: monospace;
+}
+
+/* Toggle Group */
+.toggle-group {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color, #2d2d44);
+    margin-bottom: 20px;
+}
+
+.toggle-label {
+    flex: 1;
+}
+
+.toggle-label span {
+    display: block;
+    color: var(--text-primary, #fff);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.toggle-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #8e8ea0);
+    margin-top: 4px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-tertiary, #2d2d44);
+    transition: 0.3s;
+    border-radius: 26px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: var(--accent-color, #00d9ff);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(22px);
+}
+
+/* VoIP Fields Container */
+.voip-fields {
+    transition: opacity 0.3s;
+}
+
+.voip-fields.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Field Hint */
+.field-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted, #666);
+    margin-top: 4px;
+}
+
+/* Override modal-body styles for voip modal */
+.voip-modal .modal-body .form-group {
+    margin-bottom: 16px;
+}
+
+.voip-modal .modal-body label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-secondary, #8e8ea0);
+    font-size: 0.85rem;
+}
+
+.voip-modal .modal-body input[type="text"],
+.voip-modal .modal-body input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg-secondary, #16162a);
+    border: 1px solid var(--border-color, #2d2d44);
+    border-radius: 8px;
+    color: var(--text-primary, #fff);
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.voip-modal .modal-body input:focus {
+    outline: none;
+    border-color: var(--accent-color, #00d9ff);
+}
+
+.voip-modal .modal-body input:disabled {
+    background: var(--bg-tertiary, #2d2d44);
+    cursor: not-allowed;
+}
+
+.voip-modal .modal-body input::placeholder {
+    color: var(--text-muted, #666);
+}
+
+/* Alert Styles */
+.voip-modal .alert {
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+
+.voip-modal .alert-error {
+    background: rgba(255, 82, 82, 0.15);
+    color: #ff5252;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+}
+
+/* Modal Actions */
+.voip-modal .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.voip-modal .modal-actions button {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}

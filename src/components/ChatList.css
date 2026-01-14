@@ -1,0 +1,343 @@
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+}
+
+.chat-list-header {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+}
+
+.header-gradient {
+  background: white;
+  /* Clean look */
+  padding: 10px 15px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-branding {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chirosteo-logo {
+  height: 38px;
+  width: auto;
+}
+
+.app-info h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a73e8;
+  /* Google Blue style */
+  margin: 0;
+  line-height: 1.1;
+}
+
+.app-subtitle {
+  font-size: 11px;
+  color: #5f6368;
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  color: #5f6368;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover {
+  background-color: #f1f3f4;
+}
+
+/* === CHANNEL TABS (NOUVEAU) === */
+.channel-tabs {
+  display: flex;
+  padding: 0 10px;
+  margin-top: 5px;
+  gap: 5px;
+  background: white;
+}
+
+.channel-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #5f6368;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.channel-tab.active {
+  color: #1a73e8;
+  border-bottom-color: #1a73e8;
+}
+
+.channel-tab:hover:not(.active) {
+  background-color: #f8f9fa;
+  color: #202124;
+}
+
+/* === SEARCH BAR === */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f1f3f4;
+  margin: 10px 15px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.search-bar .material-icons {
+  color: #5f6368;
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.search-bar input {
+  border: none;
+  background: none;
+  flex: 1;
+  font-size: 14px;
+  outline: none;
+  color: #202124;
+}
+
+/* === LIST CONTENT === */
+.chat-list-content {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #bdc1c6;
+}
+
+.empty-state .material-icons {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+/* === CHAT ITEM === */
+.chat-item {
+  display: flex;
+  padding: 12px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #f8f9fa;
+  transition: background-color 0.1s;
+}
+
+.chat-item:hover {
+  background-color: #f5f5f5;
+}
+
+.chat-item.selected {
+  background-color: #e8f0fe;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: visible;
+  /* Pour afficher le badge */
+  position: relative;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar span {
+  font-size: 18px;
+  font-weight: 500;
+  color: #757575;
+}
+
+/* SOURCE BADGE */
+.source-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #999;
+  border: 2px solid white;
+  font-family: 'Material Icons';
+  /* Use icon font */
+  font-size: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.source-badge.whatsapp {
+  background-color: #25D366;
+  content: 'chat';
+  /* Fallback handled by React text content usually, but icon font does magic */
+}
+
+.source-badge.sms {
+  background-color: #1a73e8;
+  /* Blue for SMS */
+}
+
+.chat-info {
+  flex: 1;
+  min-width: 0;
+  /* Important pour truncate */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.chat-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #202124;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.chat-time {
+  font-size: 12px;
+  color: #5f6368;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.chat-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-message {
+  font-size: 14px;
+  color: #5f6368;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  background-color: #25D366;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0 6px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+
+.typing-indicator {
+  color: #25D366;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.typing-indicator .material-icons {
+  font-size: 14px;
+}
+
+/* FAB */
+.fab {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 100;
+}
+
+/* Mobile: remonter le FAB au-dessus de la bottom nav */
+@media (max-width: 768px) {
+  .fab {
+    bottom: 80px;
+  }
+}
+
+.fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.fab .material-icons {
+  font-size: 24px;
+}
