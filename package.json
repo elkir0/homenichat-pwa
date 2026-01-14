@@ -2,6 +2,7 @@
   "name": "homenichat-pwa",
   "version": "1.0.0",
   "description": "Frontend PWA pour Homenichat - Unified Communication Platform",
+  "homepage": "/pwa",
   "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
