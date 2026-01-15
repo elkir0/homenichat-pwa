@@ -787,23 +787,27 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
     // Support pour WhatsApp API - structure existante
     if (message.message?.imageMessage) {
       // Pour les images, utiliser notre serveur de médias ou le thumbnail
-      let imageSrc = '/placeholder-image.png';
+      let imageSrc = null;
+      let hasRealImage = false;
 
       // Si on a un ID de média local, l'utiliser en priorité
       if (message.message.imageMessage.localMediaId) {
         imageSrc = `/api/media/${message.message.imageMessage.localMediaId}`;
+        hasRealImage = true;
       } else if (message.message.imageMessage.jpegThumbnail) {
         // Sinon, utiliser le thumbnail s'il existe
         imageSrc = `data:image/jpeg;base64,${message.message.imageMessage.jpegThumbnail}`;
+        hasRealImage = true;
       }
 
       return (
         <div className="media-message">
-          <img
-            src={imageSrc}
-            alt="Media"
-            style={{ maxWidth: '300px', maxHeight: '300px', cursor: 'pointer' }}
-            onClick={async () => {
+          {hasRealImage ? (
+            <img
+              src={imageSrc}
+              alt="Media"
+              style={{ maxWidth: '300px', maxHeight: '300px', cursor: 'pointer', borderRadius: '8px' }}
+              onClick={async () => {
               try {
                 // Afficher d'abord le thumbnail pendant le chargement
                 setViewerImage({
@@ -849,6 +853,46 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
               }
             }}
           />
+          ) : (
+            /* Placeholder cliquable quand pas de miniature */
+            <div
+              style={{
+                width: '200px',
+                height: '150px',
+                backgroundColor: '#e0e0e0',
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                gap: '8px'
+              }}
+              onClick={async () => {
+                try {
+                  setViewerImage({ src: null, loading: true, caption: message.message.imageMessage.caption });
+                  const mediaData = await whatsappApi.downloadMediaMessage(message.key);
+                  if (mediaData.base64) {
+                    setViewerImage({
+                      src: `data:${mediaData.mimetype || 'image/jpeg'};base64,${mediaData.base64}`,
+                      caption: message.message.imageMessage.caption,
+                      loading: false
+                    });
+                  } else {
+                    setViewerImage(null);
+                    alert('Impossible de charger l\'image');
+                  }
+                } catch (error) {
+                  console.error('Erreur chargement image:', error);
+                  setViewerImage(null);
+                  alert('Erreur lors du chargement de l\'image');
+                }
+              }}
+            >
+              <span className="material-icons" style={{ fontSize: '48px', color: '#666' }}>image</span>
+              <span style={{ fontSize: '12px', color: '#666' }}>Cliquez pour charger</span>
+            </div>
+          )}
           {message.message.imageMessage.caption && (
             <p className="media-caption">{message.message.imageMessage.caption}</p>
           )}
@@ -909,19 +953,50 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
     }
 
     if (message.message?.documentMessage) {
+      const fileName = message.message.documentMessage.fileName || 'Document';
       return (
         <div className="document-message"
-          style={{ cursor: 'pointer', padding: '10px', border: '1px solid #ddd', borderRadius: '8px' }}
-          onClick={() => {
+          style={{ cursor: 'pointer', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}
+          onClick={async () => {
+            // Si on a une URL directe, l'utiliser
             if (message.message.documentMessage.url) {
               window.open(message.message.documentMessage.url, '_blank');
+              return;
+            }
+            // Sinon télécharger via l'API
+            try {
+              const mediaData = await whatsappApi.downloadMediaMessage(message.key);
+              if (mediaData.base64) {
+                // Créer un blob et télécharger
+                const byteCharacters = atob(mediaData.base64);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: mediaData.mimetype || 'application/octet-stream' });
+
+                // Créer un lien de téléchargement
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              } else {
+                alert('Impossible de télécharger le document');
+              }
+            } catch (error) {
+              console.error('Erreur téléchargement document:', error);
+              alert('Erreur lors du téléchargement');
             }
           }}
         >
           <span className="material-icons">description</span>
-          <span className="document-name">
-            {message.message.documentMessage.fileName || 'Document'}
-          </span>
+          <span className="document-name">{fileName}</span>
+          <span className="material-icons" style={{ marginLeft: 'auto', fontSize: '18px' }}>download</span>
         </div>
       );
     }
