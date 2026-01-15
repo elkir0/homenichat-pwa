@@ -2,6 +2,8 @@
 .message-input {
   background-color: var(--surface-color);
   padding: 8px 16px;
+  /* Add padding for bottom navigation safe area */
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
@@ -197,6 +199,8 @@
   align-items: center;
   gap: 4px;
   padding: 8px 0 0;
+  /* Margin to ensure visibility above bottom navigation */
+  margin-bottom: 4px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -239,6 +243,8 @@
 @media (max-width: 768px) {
   .message-input {
     padding: 8px 12px;
+    /* Extra padding to avoid overlap with bottom navigation */
+    padding-bottom: 12px;
   }
 
   .input-wrapper {
