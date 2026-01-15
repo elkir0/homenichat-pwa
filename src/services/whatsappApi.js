@@ -361,6 +361,52 @@ class WhatsAppApi {
     return cleaned;
   }
 
+  /**
+   * Télécharge le média d'un message
+   * @param {Object} messageKey - Clé du message Baileys (avec id et remoteJid)
+   * @returns {Promise<{base64?: string, mimetype?: string, localUrl?: string, error?: string}>}
+   */
+  async downloadMediaMessage(messageKey) {
+    try {
+      // Extraire chatId et messageId du key
+      const chatId = messageKey?.remoteJid || messageKey?.chatId;
+      const messageId = messageKey?.id || messageKey;
+
+      if (!chatId || !messageId) {
+        console.error('Invalid messageKey:', messageKey);
+        return { error: 'Invalid message key' };
+      }
+
+      const response = await fetch(
+        `${API_URL}/api/chats/${encodeURIComponent(chatId)}/messages/${messageId}/media`,
+        {
+          headers: this.getHeaders()
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to download media');
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        return {
+          base64: data.base64,
+          mimetype: data.mimetype,
+          localUrl: data.localUrl,
+          size: data.size
+        };
+      } else {
+        return { error: data.error || 'Download failed' };
+      }
+    } catch (error) {
+      console.error('Error downloading media:', error);
+      return { error: error.message };
+    }
+  }
+
   setToken(token) {
     this.token = token;
   }
