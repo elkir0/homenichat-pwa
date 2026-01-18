@@ -733,7 +733,7 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
   const renderMediaMessage = (message) => {
     // Support pour l'API Meta - structure simplifiée
     if (message.type === 'image' && message.media) {
-      let imageSrc = '/placeholder-image.png';
+      let imageSrc = null;
 
       // Si on a une URL locale
       if (message.media.localUrl) {
@@ -744,19 +744,38 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
 
       return (
         <div className="media-message">
-          <img
-            src={imageSrc}
-            alt="Media"
-            style={{ maxWidth: '300px', maxHeight: '300px', cursor: 'pointer' }}
-            onClick={() => {
-              setViewerImage({
-                src: imageSrc,
-                caption: message.content || '',
-                isLowQuality: false,
-                loading: false
-              });
-            }}
-          />
+          {imageSrc ? (
+            <img
+              src={imageSrc}
+              alt="Media"
+              style={{ maxWidth: '300px', maxHeight: '300px', cursor: 'pointer', borderRadius: '8px' }}
+              onClick={() => {
+                setViewerImage({
+                  src: imageSrc,
+                  caption: message.content || '',
+                  isLowQuality: false,
+                  loading: false
+                });
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: '200px',
+                height: '150px',
+                backgroundColor: '#e0e0e0',
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              <span className="material-icons" style={{ fontSize: '48px', color: '#666' }}>image</span>
+              <span style={{ fontSize: '12px', color: '#666' }}>Image non disponible</span>
+            </div>
+          )}
           {(message.content || message.message?.conversation) && (
             <p className="media-caption">{message.content || message.message?.conversation}</p>
           )}
@@ -764,9 +783,19 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
       );
     }
 
-    // Support pour l'audio Meta
-    if (message.type === 'audio') {
-      // Si pas encore de média, afficher un placeholder
+    // Support pour l'audio Meta et Baileys
+    if (message.type === 'audio' || message.message?.audioMessage) {
+      // Si c'est un message Baileys avec audioMessage, on peut le jouer directement
+      if (message.message?.audioMessage) {
+        return (
+          <AudioPlayerUnified
+            message={message}
+            isFromMe={message.key?.fromMe || message.fromMe}
+          />
+        );
+      }
+
+      // Pour Meta API: Si pas encore de média, afficher un placeholder
       if (!message.media || (!message.media.url && !message.media.localUrl)) {
         return (
           <div className="media-message audio-loading">
@@ -775,12 +804,73 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
           </div>
         );
       }
-      // Sinon utiliser le player
+      // Meta API avec média disponible
       return (
         <AudioPlayerUnified
           message={message}
           isFromMe={message.key?.fromMe || message.fromMe}
         />
+      );
+    }
+
+    // Support pour les vidéos Meta API
+    if (message.type === 'video' && message.media) {
+      let videoSrc = null;
+      let hasThumbnail = false;
+
+      if (message.media.localUrl) {
+        videoSrc = message.media.localUrl;
+        hasThumbnail = true;
+      } else if (message.media.localMediaId) {
+        videoSrc = `/api/media/${message.media.localMediaId}`;
+        hasThumbnail = true;
+      }
+
+      return (
+        <div className="media-message">
+          {hasThumbnail ? (
+            <div style={{ position: 'relative', display: 'inline-block', cursor: 'pointer' }} onClick={() => window.open(videoSrc, '_blank')}>
+              <video
+                src={videoSrc}
+                style={{ maxWidth: '300px', maxHeight: '300px', borderRadius: '8px' }}
+                preload="metadata"
+              />
+              <span className="material-icons" style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                fontSize: '48px',
+                color: 'white',
+                backgroundColor: 'rgba(0,0,0,0.6)',
+                borderRadius: '50%',
+                padding: '8px'
+              }}>play_circle_filled</span>
+            </div>
+          ) : (
+            <div
+              style={{
+                width: '200px',
+                height: '150px',
+                backgroundColor: '#2a2a2a',
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                gap: '8px'
+              }}
+              onClick={() => alert('Vidéo non disponible')}
+            >
+              <span className="material-icons" style={{ fontSize: '48px', color: '#fff', backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: '50%', padding: '8px' }}>play_circle_filled</span>
+              <span style={{ fontSize: '12px', color: '#aaa' }}>Vidéo</span>
+            </div>
+          )}
+          {message.content && (
+            <p className="media-caption">{message.content}</p>
+          )}
+        </div>
       );
     }
 
@@ -902,39 +992,79 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
 
     if (message.message?.videoMessage) {
       const thumbnailData = message.message.videoMessage.jpegThumbnail;
-      let videoSrc = '/placeholder-image.png';
+      const hasThumbnail = !!thumbnailData;
 
-      if (thumbnailData) {
-        videoSrc = `data:image/jpeg;base64,${thumbnailData}`;
-      }
+      const handleVideoClick = async () => {
+        // Si on a une URL directe, l'ouvrir
+        if (message.message.videoMessage.url) {
+          window.open(message.message.videoMessage.url, '_blank');
+          return;
+        }
+        // Sinon télécharger via l'API
+        try {
+          const mediaData = await whatsappApi.downloadMediaMessage(message.key);
+          if (mediaData.base64) {
+            // Créer un blob et ouvrir
+            const byteCharacters = atob(mediaData.base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: mediaData.mimetype || 'video/mp4' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+          } else {
+            alert('Impossible de charger la vidéo');
+          }
+        } catch (error) {
+          console.error('Erreur téléchargement vidéo:', error);
+          alert('Erreur lors du chargement de la vidéo');
+        }
+      };
 
       return (
         <div className="media-message">
-          <div style={{ position: 'relative', display: 'inline-block' }}>
-            <img
-              src={videoSrc}
-              alt="Video"
-              style={{ maxWidth: '300px', maxHeight: '300px', cursor: 'pointer' }}
-              onClick={() => {
-                if (message.message.videoMessage.url) {
-                  window.open(message.message.videoMessage.url, '_blank');
-                } else {
-                  alert('Vidéo non disponible');
-                }
+          {hasThumbnail ? (
+            <div style={{ position: 'relative', display: 'inline-block', cursor: 'pointer' }} onClick={handleVideoClick}>
+              <img
+                src={`data:image/jpeg;base64,${thumbnailData}`}
+                alt="Video"
+                style={{ maxWidth: '300px', maxHeight: '300px', borderRadius: '8px' }}
+              />
+              <span className="material-icons" style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                fontSize: '48px',
+                color: 'white',
+                backgroundColor: 'rgba(0,0,0,0.6)',
+                borderRadius: '50%',
+                padding: '8px'
+              }}>play_circle_filled</span>
+            </div>
+          ) : (
+            /* Placeholder cliquable quand pas de miniature */
+            <div
+              style={{
+                width: '200px',
+                height: '150px',
+                backgroundColor: '#2a2a2a',
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                gap: '8px'
               }}
-            />
-            <span className="material-icons" style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              fontSize: '48px',
-              color: 'white',
-              backgroundColor: 'rgba(0,0,0,0.6)',
-              borderRadius: '50%',
-              padding: '8px'
-            }}>play_circle_filled</span>
-          </div>
+              onClick={handleVideoClick}
+            >
+              <span className="material-icons" style={{ fontSize: '48px', color: '#fff', backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: '50%', padding: '8px' }}>play_circle_filled</span>
+              <span style={{ fontSize: '12px', color: '#aaa' }}>Cliquez pour lire</span>
+            </div>
+          )}
           {message.message.videoMessage.caption && (
             <p className="media-caption">{message.message.videoMessage.caption}</p>
           )}
@@ -1008,7 +1138,7 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
     return (
       <div className="chat-window-empty">
         <div className="empty-state">
-          <img src="/logo-192.png" alt="Homenichat" className="empty-logo" />
+          <img src="/pwa/logo-192.png" alt="Homenichat" className="empty-logo" />
           <h2>Homenichat</h2>
           <p>Sélectionnez une conversation pour commencer</p>
         </div>

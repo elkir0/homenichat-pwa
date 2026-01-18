@@ -158,7 +158,7 @@ class OfflineQueueService {
           const registration = await navigator.serviceWorker.ready;
           registration.showNotification('Message envoyé', {
             body: `Message envoyé à ${queueItem.chatName}`,
-            icon: '/logo-192.png',
+            icon: '/pwa/logo-192.png',
             tag: 'message-sent',
             silent: true
           });
@@ -346,7 +346,7 @@ class OfflineQueueService {
     if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
       new Notification('Mode hors ligne', {
         body: 'Les messages seront envoyés dès que la connexion sera rétablie',
-        icon: '/logo-192.png',
+        icon: '/pwa/logo-192.png',
         tag: 'offline-mode'
       });
     }

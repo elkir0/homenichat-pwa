@@ -67,8 +67,10 @@ function AudioPlayerUnified({ message, isFromMe }) {
         setAudioSrc(audioInfo.localUrl);
       } else if (audioInfo.type === 'baileys' && audioInfo.messageKey) {
         // Pour WhatsApp, télécharger via l'API
+        console.log('Téléchargement audio pour messageKey:', audioInfo.messageKey);
         const mediaData = await whatsappApi.downloadMediaMessage(audioInfo.messageKey);
-        
+        console.log('Réponse downloadMediaMessage:', mediaData);
+
         if (mediaData.base64) {
           // Créer un blob URL à partir du base64
           const byteCharacters = atob(mediaData.base64);
@@ -79,10 +81,15 @@ function AudioPlayerUnified({ message, isFromMe }) {
           const byteArray = new Uint8Array(byteNumbers);
           const blob = new Blob([byteArray], { type: mediaData.mimetype || 'audio/ogg' });
           const url = URL.createObjectURL(blob);
-          
+
           setAudioSrc(url);
+        } else if (mediaData.localUrl) {
+          // Si le serveur retourne une URL locale au lieu du base64
+          setAudioSrc(mediaData.localUrl);
+        } else if (mediaData.error) {
+          throw new Error(mediaData.error);
         } else {
-          throw new Error('Pas de données audio');
+          throw new Error('Pas de données audio disponibles');
         }
       } else {
         throw new Error('Type d\'API non supporté ou données manquantes');

@@ -2,7 +2,7 @@
 
 > Progressive Web App for Homenichat Unified Communication Platform
 
-[![License](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org)
 [![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](#features)
 
@@ -87,7 +87,7 @@ homenichat-pwa/
 
 ## License
 
-GNU General Public License v3.0 - see [LICENSE](LICENSE)
+MIT License - see [LICENSE](LICENSE)
 
 ---
 

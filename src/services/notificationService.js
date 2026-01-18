@@ -64,7 +64,7 @@ class NotificationService {
         // Afficher une notification de test
         this.showNotification('Homenichat', {
           body: 'Les notifications sont activées ! 🎉',
-          icon: '/logo-192.png'
+          icon: '/pwa/logo-192.png'
         });
 
         // S'abonner aux push notifications
@@ -200,8 +200,8 @@ class NotificationService {
         // Utiliser le service worker pour afficher la notification
         await this.registration.showNotification(title, {
           body: options.body || '',
-          icon: options.icon || '/logo-192.png',
-          badge: options.badge || '/logo-192.png',
+          icon: options.icon || '/pwa/logo-192.png',
+          badge: options.badge || '/pwa/logo-192.png',
           tag: options.tag || 'homenichat-notification',
           data: options.data || {},
           vibrate: options.vibrate || [200, 100, 200],
@@ -224,7 +224,7 @@ class NotificationService {
   async notifyNewMessage(chat, message) {
     const options = {
       body: message.text || 'Nouveau message',
-      icon: chat.profilePicture || '/logo-192.png',
+      icon: chat.profilePicture || '/pwa/logo-192.png',
       tag: `message-${chat.id}`,
       data: {
         chatId: chat.id,

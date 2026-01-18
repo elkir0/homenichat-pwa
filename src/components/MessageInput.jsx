@@ -143,6 +143,18 @@ function MessageInput({ onSendMessage, disabled, chatId, activeSessionId }) {
   // Gestion de l'enregistrement vocal
   const startRecording = async () => {
     try {
+      // Vérifier si on est en contexte sécurisé (HTTPS requis pour le micro)
+      if (!window.isSecureContext) {
+        alert('L\'enregistrement vocal nécessite une connexion HTTPS sécurisée. En HTTP, le navigateur bloque l\'accès au microphone.');
+        return;
+      }
+
+      // Vérifier si l'API mediaDevices est disponible
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Votre navigateur ne supporte pas l\'enregistrement audio ou l\'accès est bloqué (HTTPS requis).');
+        return;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
       // Utiliser un format supporté par le navigateur ET Meta
@@ -260,8 +272,11 @@ function MessageInput({ onSendMessage, disabled, chatId, activeSessionId }) {
       const uploadResult = await uploadResponse.json();
       console.log('Upload result:', JSON.stringify(uploadResult, null, 2));
 
-      const mediaId = uploadResult.media?.metaMediaId || uploadResult.mediaId;
+      // Récupérer l'ID du média - plusieurs formats possibles selon le backend
+      const mediaId = uploadResult.media?.metaMediaId || uploadResult.media?.id || uploadResult.mediaId;
+      const mediaUrl = uploadResult.media?.url || `/api/media/${mediaId}`;
       console.log('Media ID to send:', mediaId);
+      console.log('Media URL:', mediaUrl);
 
       if (!mediaId) {
         console.error('No media ID found in upload result!');
@@ -280,8 +295,9 @@ function MessageInput({ onSendMessage, disabled, chatId, activeSessionId }) {
             type: 'audio',
             id: mediaId,
             metaMediaId: mediaId,
-            url: uploadResult.media?.url || `/api/media/${uploadResult.media?.id}`,
-            fileName: 'voice-message.opus'
+            localMediaId: mediaId,
+            url: mediaUrl,
+            fileName: uploadResult.media?.fileName || 'voice-message.mp4'
           }
         })
       });

@@ -2,20 +2,20 @@
   "name": "Homenichat",
   "short_name": "Homenichat",
   "description": "Unified Communication Platform - WhatsApp, SMS, VoIP",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1a73e8",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/logo-192.png",
+      "src": "./logo-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/logo-512.png",
+      "src": "./logo-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -23,11 +23,11 @@
   ],
   "categories": ["productivity", "communication"],
   "prefer_related_applications": false,
-  "scope": "/",
+  "scope": "./",
   "shortcuts": [
     {
       "name": "Nouvelle conversation",
-      "url": "/new-chat",
+      "url": "./new-chat",
       "description": "Démarrer une nouvelle conversation"
     }
   ]
