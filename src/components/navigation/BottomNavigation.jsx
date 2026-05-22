@@ -6,7 +6,7 @@ import './BottomNavigation.css';
  *
  * Trois onglets principaux:
  * - SMS: Messages SMS via SMS Bridge
- * - WhatsApp: Messages WhatsApp via Baileys
+ * - WhatsApp: Messages WhatsApp via appareil lie
  * - Téléphone: Appels VoIP via WebRTC/Yeastar
  */
 const BottomNavigation = ({ activeTab, onTabChange, badges = {} }) => {

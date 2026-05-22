@@ -486,11 +486,11 @@ function MainApp() {
 
   // Mettre à jour un chat avec un nouveau message
   const updateChatWithNewMessage = async (messageData) => {
-    // Adapter la structure Baileys/Meta à celle attendue par le frontend
+    // Adapter la structure WhatsApp/Business à celle attendue par le frontend
     const normalizedMessage = messageData.key ? messageData : {
       key: {
         remoteJid: messageData.chatId || messageData.from,
-        fromMe: messageData.fromMe ?? messageData.isFromMe ?? false, // Baileys utilise isFromMe
+        fromMe: messageData.fromMe ?? messageData.isFromMe ?? false,
         id: messageData.id
       },
       message: messageData.message || {

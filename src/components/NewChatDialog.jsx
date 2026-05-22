@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import whatsappApi from '../services/whatsappApi';
 import { validateInternationalNumber, formatDisplayNumber, getHelpMessage } from '../utils/phoneNumberUtils';
+import { SMS_BRIDGE_PROVIDER_ID, WHATSAPP_DEVICE_PROVIDER_ID } from '../constants/providers';
 import './NewChatDialog.css';
 
 function NewChatDialog({ isOpen, onClose, onChatCreated }) {
@@ -96,14 +97,14 @@ function NewChatDialog({ isOpen, onClose, onChatCreated }) {
 
     try {
       // Mapper la ligne vers le nom du provider backend
-      let provider = 'baileys'; // Default
+      let provider = WHATSAPP_DEVICE_PROVIDER_ID;
       if (line === 'chiro_sms' || line === 'osteo_sms') {
-        provider = 'sms-bridge';
+        provider = SMS_BRIDGE_PROVIDER_ID;
       }
 
       // Construire le JID selon le provider
       let jid;
-      if (provider === 'sms-bridge') {
+      if (provider === SMS_BRIDGE_PROVIDER_ID) {
         const linePrefix = line.replace('_sms', '');
         jid = `sms_${linePrefix}_${phoneNumber}`;
       } else {

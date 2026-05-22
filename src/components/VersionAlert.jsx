@@ -39,7 +39,7 @@ const VersionAlert = () => {
             <div className="version-alert-content">
                 <span className="material-icons warning-icon">warning_amber</span>
                 <div className="version-message">
-                    <strong>Mise à jour de sécurité Baileys requise !</strong>
+                    <strong>Mise à jour de sécurité WhatsApp requise !</strong>
                     <span>Version actuelle: {status.current} → Nouvelle version: {status.latest}</span>
                 </div>
                 <button className="close-alert" onClick={() => setIsVisible(false)}>

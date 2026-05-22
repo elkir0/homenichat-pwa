@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import whatsappApi from '../services/whatsappApi';
+import { WHATSAPP_DEVICE_PROVIDER_ID, WHATSAPP_META_PROVIDER_ID } from '../constants/providers';
 import './AudioPlayer.css';
 
 /**
@@ -23,7 +24,7 @@ function AudioPlayerUnified({ message, isFromMe }) {
     // Meta API
     if (message.type === 'audio' && message.media) {
       return {
-        type: 'meta',
+        type: WHATSAPP_META_PROVIDER_ID,
         audioData: message.media,
         duration: message.media.duration || 0,
         voice: message.media.voice || false,
@@ -34,7 +35,7 @@ function AudioPlayerUnified({ message, isFromMe }) {
     // WhatsApp API
     if (message.message?.audioMessage) {
       return {
-        type: 'baileys',
+        type: WHATSAPP_DEVICE_PROVIDER_ID,
         audioData: message.message.audioMessage,
         duration: message.message.audioMessage.seconds || 0,
         messageKey: message.key
@@ -62,10 +63,10 @@ function AudioPlayerUnified({ message, isFromMe }) {
     setError(null);
     
     try {
-      if (audioInfo.type === 'meta' && audioInfo.localUrl) {
+      if (audioInfo.type === WHATSAPP_META_PROVIDER_ID && audioInfo.localUrl) {
         // Pour Meta, on a déjà l'URL locale
         setAudioSrc(audioInfo.localUrl);
-      } else if (audioInfo.type === 'baileys' && audioInfo.messageKey) {
+      } else if (audioInfo.type === WHATSAPP_DEVICE_PROVIDER_ID && audioInfo.messageKey) {
         // Pour WhatsApp, télécharger via l'API
         console.log('Téléchargement audio pour messageKey:', audioInfo.messageKey);
         const mediaData = await whatsappApi.downloadMediaMessage(audioInfo.messageKey);
@@ -105,7 +106,7 @@ function AudioPlayerUnified({ message, isFromMe }) {
   // Nettoyage de l'URL quand le composant est démonté
   useEffect(() => {
     return () => {
-      if (audioSrc && audioInfo.type === 'baileys') {
+      if (audioSrc && audioInfo.type === WHATSAPP_DEVICE_PROVIDER_ID) {
         // Ne nettoyer que les blob URLs créées pour WhatsApp
         URL.revokeObjectURL(audioSrc);
       }
@@ -180,7 +181,7 @@ function AudioPlayerUnified({ message, isFromMe }) {
           )}
           
           {/* Waveform visuelle (WhatsApp uniquement) */}
-          {audioInfo.type === 'baileys' && audioInfo.audioData?.waveform && !audioSrc && (
+          {audioInfo.type === WHATSAPP_DEVICE_PROVIDER_ID && audioInfo.audioData?.waveform && !audioSrc && (
             <div className="waveform">
               <div className="waveform-bars">
                 {/* Simplifié: quelques barres statiques */}

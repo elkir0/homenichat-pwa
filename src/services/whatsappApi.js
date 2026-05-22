@@ -1,9 +1,16 @@
 /**
  * Service API WhatsApp unifié
- * Gère la communication avec le backend qui utilise Baileys ou Meta
+ * Gere la communication avec les providers WhatsApp et Business.
  */
 
+import { WHATSAPP_DEVICE_PROVIDER_ID, WHATSAPP_META_PROVIDER_ID } from '../constants/providers';
+
 const API_URL = process.env.REACT_APP_API_URL || '';
+const WHATSAPP_DEVICE_PROVIDER_ROUTES = {
+  qr: `/api/providers/qr/${WHATSAPP_DEVICE_PROVIDER_ID}`,
+  connect: `/api/providers/connect/${WHATSAPP_DEVICE_PROVIDER_ID}`,
+  disconnect: `/api/providers/disconnect/${WHATSAPP_DEVICE_PROVIDER_ID}`,
+};
 
 class WhatsAppApi {
   constructor() {
@@ -13,7 +20,7 @@ class WhatsAppApi {
 
   /**
    * Définit le provider à utiliser pour les requêtes
-   * @param sessionId - 'baileys' | 'meta' | null (auto)
+   * @param sessionId - provider technique ou null (auto)
    */
   setSessionId(sessionId) {
     this.sessionId = sessionId;
@@ -50,7 +57,7 @@ class WhatsAppApi {
       if (!response.ok) throw new Error('Failed to get connection state');
 
       const data = await response.json();
-      const activeProvider = data.activeProvider || 'meta';
+      const activeProvider = data.activeProvider || WHATSAPP_META_PROVIDER_ID;
       const providerHealth = data.health?.[activeProvider] || {};
       return {
         instance: {
@@ -71,7 +78,7 @@ class WhatsAppApi {
 
   async getQRCode() {
     try {
-      const response = await fetch(`${API_URL}/api/providers/qr/baileys`, {
+      const response = await fetch(`${API_URL}${WHATSAPP_DEVICE_PROVIDER_ROUTES.qr}`, {
         headers: this.getHeaders()
       });
 
@@ -91,7 +98,7 @@ class WhatsAppApi {
 
   async connect() {
     try {
-      const response = await fetch(`${API_URL}/api/providers/connect/baileys`, {
+      const response = await fetch(`${API_URL}${WHATSAPP_DEVICE_PROVIDER_ROUTES.connect}`, {
         method: 'POST',
         headers: this.getHeaders()
       });
@@ -107,7 +114,7 @@ class WhatsAppApi {
 
   async logout() {
     try {
-      const response = await fetch(`${API_URL}/api/providers/disconnect/baileys`, {
+      const response = await fetch(`${API_URL}${WHATSAPP_DEVICE_PROVIDER_ROUTES.disconnect}`, {
         method: 'POST',
         headers: this.getHeaders()
       });
@@ -363,7 +370,7 @@ class WhatsAppApi {
 
   /**
    * Télécharge le média d'un message
-   * @param {Object} messageKey - Clé du message Baileys (avec id et remoteJid)
+   * @param {Object} messageKey - Cle du message WhatsApp (avec id et remoteJid)
    * @returns {Promise<{base64?: string, mimetype?: string, localUrl?: string, error?: string}>}
    */
   async downloadMediaMessage(messageKey) {

@@ -7,6 +7,7 @@ import axios from 'axios';
 import offlineQueueService from '../services/offlineQueueService';
 import { useHumanBehavior } from '../utils/humanBehavior';
 import useVoIP from '../hooks/useVoIP';
+import { SMS_BRIDGE_PROVIDER_ID, WHATSAPP_DEVICE_PROVIDER_ID } from '../constants/providers';
 import './ChatWindow.css';
 
 function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted, activeSessionId }) {
@@ -420,8 +421,8 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
 
     try {
       // Utiliser l'API locale directement
-      // Déterminer le provider (par défaut baileys/whatsapp)
-      const provider = chat.provider || (chat.id.startsWith('sms_') ? 'sms' : 'baileys');
+      // Déterminer le provider cible
+      const provider = chat.provider || (chat.id.startsWith('sms_') ? 'sms' : WHATSAPP_DEVICE_PROVIDER_ID);
       const realId = chat.id;
 
       // Faire la requête
@@ -522,7 +523,7 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
         console.log('📤 Envoi du message:', text, 'vers', chat.id);
         const response = await axios.post(`/api/chats/${chat.id}/messages`, {
           text: text,
-          provider: chat.provider || (chat.id.startsWith('sms_') ? 'sms-bridge' : 'baileys')
+          provider: chat.provider || (chat.id.startsWith('sms_') ? SMS_BRIDGE_PROVIDER_ID : WHATSAPP_DEVICE_PROVIDER_ID)
         }, {
           headers: createHeaders()
         });
@@ -783,9 +784,9 @@ function ChatWindow({ chat, newMessage, onBack, onMessageSent, onDraftConverted,
       );
     }
 
-    // Support pour l'audio Meta et Baileys
+    // Support pour l'audio WhatsApp et Business
     if (message.type === 'audio' || message.message?.audioMessage) {
-      // Si c'est un message Baileys avec audioMessage, on peut le jouer directement
+      // Si c'est un message WhatsApp avec audioMessage, on peut le jouer directement
       if (message.message?.audioMessage) {
         return (
           <AudioPlayerUnified

@@ -29,6 +29,7 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 import './SessionTabs.css';
+import { WHATSAPP_DEVICE_PROVIDER_ID, WHATSAPP_META_PROVIDER_ID } from '../constants/providers';
 
 function SessionTabs({ onSessionChange }) {
   const [sessions, setSessions] = useState([]);
@@ -39,7 +40,7 @@ function SessionTabs({ onSessionChange }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newSession, setNewSession] = useState({
     name: '',
-    providerType: 'baileys',
+    providerType: WHATSAPP_DEVICE_PROVIDER_ID,
     phoneNumber: '',
     config: {}
   });
@@ -97,13 +98,13 @@ function SessionTabs({ onSessionChange }) {
 
       // Configuration spécifique selon le provider
       let config = {};
-      if (newSession.providerType === 'baileys') {
+      if (newSession.providerType === WHATSAPP_DEVICE_PROVIDER_ID) {
         config = {
           apiUrl: process.env.REACT_APP_EVOLUTION_URL || 'http://192.168.1.141:8080',
-          apiKey: newSession.baileysApiKey || '',
+          apiKey: newSession.whatsappDeviceApiKey || '',
           instanceName: newSession.instanceName || `instance-${Date.now()}`
         };
-      } else if (newSession.providerType === 'meta') {
+      } else if (newSession.providerType === WHATSAPP_META_PROVIDER_ID) {
         config = {
           accessToken: newSession.metaAccessToken || '',
           phoneNumberId: newSession.metaPhoneNumberId || '',
@@ -123,7 +124,7 @@ function SessionTabs({ onSessionChange }) {
       setDialogOpen(false);
       setNewSession({
         name: '',
-        providerType: 'baileys',
+        providerType: WHATSAPP_DEVICE_PROVIDER_ID,
         phoneNumber: '',
         config: {}
       });
@@ -168,9 +169,9 @@ function SessionTabs({ onSessionChange }) {
   };
 
   const getSessionIcon = (session) => {
-    if (session.providerType === 'baileys') {
+    if (session.providerType === WHATSAPP_DEVICE_PROVIDER_ID) {
       return <WhatsAppIcon />;
-    } else if (session.providerType === 'meta') {
+    } else if (session.providerType === WHATSAPP_META_PROVIDER_ID) {
       return <CloudIcon />;
     }
     return null;
@@ -277,8 +278,8 @@ function SessionTabs({ onSessionChange }) {
               value={newSession.providerType}
               onChange={(e) => setNewSession({ ...newSession, providerType: e.target.value })}
             >
-              <MenuItem value="baileys">WhatsApp API (WhatsApp Web)</MenuItem>
-              <MenuItem value="meta">Meta Cloud API (Officiel)</MenuItem>
+              <MenuItem value={WHATSAPP_DEVICE_PROVIDER_ID}>WhatsApp (appareil lie)</MenuItem>
+              <MenuItem value={WHATSAPP_META_PROVIDER_ID}>WhatsApp Business</MenuItem>
             </Select>
           </FormControl>
 
@@ -292,13 +293,13 @@ function SessionTabs({ onSessionChange }) {
           />
 
           {/* Champs spécifiques selon le provider */}
-          {newSession.providerType === 'baileys' && (
+          {newSession.providerType === WHATSAPP_DEVICE_PROVIDER_ID && (
             <>
               <TextField
                 fullWidth
                 label="Clé API WhatsApp"
-                value={newSession.baileysApiKey || ''}
-                onChange={(e) => setNewSession({ ...newSession, baileysApiKey: e.target.value })}
+                value={newSession.whatsappDeviceApiKey || ''}
+                onChange={(e) => setNewSession({ ...newSession, whatsappDeviceApiKey: e.target.value })}
                 margin="normal"
                 type="password"
               />
@@ -312,7 +313,7 @@ function SessionTabs({ onSessionChange }) {
             </>
           )}
 
-          {newSession.providerType === 'meta' && (
+          {newSession.providerType === WHATSAPP_META_PROVIDER_ID && (
             <>
               <TextField
                 fullWidth

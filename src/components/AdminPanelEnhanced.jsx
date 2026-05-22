@@ -28,6 +28,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import CallStatsPanel from './admin/CallStatsPanel';
 import notificationService from '../services/notificationService';
+import { getProviderLabel, WHATSAPP_DEVICE_PROVIDER_ID } from '../constants/providers';
 
 /**
  * AdminPanelEnhanced - Panneau de statut simplifié
@@ -205,12 +206,7 @@ function AdminPanelEnhanced() {
                   Provider actif
                 </Typography>
                 <Chip
-                  label={
-                    providerStatus.activeProvider === 'baileys' ? 'WhatsApp (Baileys)' :
-                    providerStatus.activeProvider === 'meta' ? 'Meta Cloud API' :
-                    providerStatus.activeProvider === 'sms-bridge' ? 'SMS Bridge' :
-                    providerStatus.activeProvider || 'Aucun'
-                  }
+                  label={getProviderLabel(providerStatus.activeProvider)}
                   color="primary"
                   variant="filled"
                 />
@@ -227,9 +223,7 @@ function AdminPanelEnhanced() {
                       <Box key={name}>
                         {getStatusChip(
                           status.connected || status.isConnected,
-                          name === 'baileys' ? 'Baileys' :
-                          name === 'meta' ? 'Meta Cloud' :
-                          name === 'sms-bridge' ? 'SMS' : name
+                          getProviderLabel(name)
                         )}
                       </Box>
                     ))}
@@ -238,10 +232,10 @@ function AdminPanelEnhanced() {
               )}
 
               {/* Numéro connecté */}
-              {providerStatus.health?.providers?.baileys?.phoneNumber && (
+              {providerStatus.health?.providers?.[WHATSAPP_DEVICE_PROVIDER_ID]?.phoneNumber && (
                 <Grid item xs={12}>
                   <Typography variant="body2" color="text.secondary">
-                    WhatsApp connecté: {providerStatus.health.providers.baileys.phoneNumber}
+                    WhatsApp connecté: {providerStatus.health.providers[WHATSAPP_DEVICE_PROVIDER_ID].phoneNumber}
                   </Typography>
                 </Grid>
               )}

@@ -1,95 +1,68 @@
-# Homenichat-PWA
+# Homenichat PWA
 
-> Progressive Web App for Homenichat Unified Communication Platform
+PWA React historique de Homenichat.
 
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org)
-[![PWA](https://img.shields.io/badge/PWA-Ready-green.svg)](#features)
+Statut 2026-05-22 : **legacy / decision produit en attente**. La PWA n'est pas
+au meme niveau fonctionnel que l'application mobile unifiee
+`homenichat-app` : elle ne couvre pas encore proprement WhatsApp
+multi-comptes, Zoko/Meta templates, disponibilite de session, IVR moderne,
+multi-BLIIOT et les derniers contrats API.
 
----
+## Role actuel
 
-## Overview
+Ce depot peut encore servir de reference historique ou de base web, mais il ne
+doit pas etre considere comme client principal tant que la modernisation n'est
+pas planifiee.
 
-Homenichat-PWA is the web frontend for the Homenichat unified communication platform. It's a Progressive Web App that can be installed on any device and works offline.
+Client principal actuel :
 
-## Features
+- `../homenichat-app` pour iOS, iPadOS et Android.
 
-- **WhatsApp Integration** - View and send WhatsApp messages
-- **SMS Management** - Send and receive SMS
-- **VoIP Calls** - Make and receive calls via WebRTC
-- **Push Notifications** - Real-time notifications
-- **Offline Support** - Works without internet connection
-- **Installable** - Add to home screen on any device
+Backend actuel :
 
-## Quick Start
+- `../homenichat-serv`
 
-### Development
+## Installation
 
 ```bash
-# Install dependencies
 npm install
+```
 
-# Start development server
-npm start
+## Build
 
-# Build for production
+```bash
 npm run build
 ```
 
-### With Homenichat-Serv
+Le build CRA genere `build/`, ignore par Git.
 
-```bash
-# Clone the server
-git clone https://github.com/elkir0/homenichat-serv.git
+## Structure
 
-# Start with Docker
-cd homenichat-serv
-docker compose up -d
-
-# Access at http://localhost:8080
-```
-
-## Configuration
-
-### Environment Variables
-
-Create a `.env.local` file:
-
-```env
-REACT_APP_API_URL=http://localhost:3001
-REACT_APP_WS_URL=ws://localhost:3001
-```
-
-## Project Structure
-
-```
+```text
 homenichat-pwa/
-├── src/
-│   ├── components/      # Reusable UI components
-│   ├── pages/           # Page components
-│   ├── services/        # API and WebSocket services
-│   ├── contexts/        # React contexts
-│   ├── hooks/           # Custom hooks
-│   └── utils/           # Utility functions
-├── public/
-│   ├── manifest.json    # PWA manifest
-│   └── service-worker.js
+├── src/                 # application React legacy
+├── public/              # manifest et assets PWA
+├── docs/                # notes historiques
+├── build/               # genere, ignore Git
 └── package.json
 ```
 
-## Related Projects
+## Decisions ouvertes
 
-| Project | Description |
-|---------|-------------|
-| [homenichat-serv](https://github.com/elkir0/homenichat-serv) | Backend Server |
-| [homenichat-app-android](https://github.com/elkir0/homenichat-app-android) | Android App |
-| [homenichat-app-ios](https://github.com/elkir0/homenichat-app-ios) | iOS App |
+Voir l'issue GitHub `Audit: decide legacy PWA status`.
+
+Options :
+
+1. archiver officiellement le depot ;
+2. moderniser vers les contrats actuels multi-comptes/Zoko/templates ;
+3. conserver en legacy documente avec maintenance minimale.
+
+## Nettoyage applique
+
+Le SDK Android `build-tools/34.0.0` n'est pas une source PWA et ne doit plus
+etre versionne dans ce depot. Utiliser les SDK Android installes localement
+hors repo si un outil en a besoin.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE)
-
----
-
-**Homenichat** - Home + Omni + Chat
-*Self-hosted unified communication, your way.*
+MIT License - voir `LICENSE`.
