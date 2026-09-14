@@ -5,7 +5,7 @@
 > | | |
 > |---|---|
 > | Code | `~/code/<projet>` sur le **devbox** (CT601, `ssh devbox`) — aussi clonable sur le Mac ou omarchy |
-> | Origine git | Forgejo — `http://192.168.1.76:3000/anthony/<dépôt>` (joignable de partout via Tailscale) |
+> | Origine git | Forgejo — `http://forgejo:3000/anthony/<dépôt>` (nom Tailscale, joignable de partout) |
 > | Secrets | coffre chiffré **SOPS + age**, dépôt `infra-secrets` |
 > | Sauvegardes | Proxmox 2 disques + restic chiffré sur Google (1h30 / 2h / 3h) |
 >
